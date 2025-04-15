@@ -1,0 +1,20 @@
+# Ignore node_modules and .env in frontend and backend folders
+
+html-css-templates/node_modules/
+html-css-templates-server/node_modules/
+html-css-templates-server/.env
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+npm-debug.log*
+
+# IDE/editor folders
+.vscode/
+
+# Optional build folders
+dist/
+build/
