@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import API from "../userapi/userapi";
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,10 +15,11 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) return;
+    if (!name || !email || !password) return;
 
     try {
       const response = await API.post("/user/signup", {
+        name,
         email,
         password
       });
@@ -39,6 +41,14 @@ const Register = () => {
         <div className="max-w-md mx-auto bg-white p-6 rounded shadow">
           <h2 className="text-2xl font-bold mb-4">Register</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              placeholder="Enter your name"
+              className="w-full border px-3 py-2 rounded"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
             <input
               type="email"
               placeholder="Enter your email"

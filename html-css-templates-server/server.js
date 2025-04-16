@@ -8,6 +8,8 @@ import adminAuthRoutes from './routes/AdminauthRoutes.js';
 import userAuthRoutes from './routes/UserAuthRoutes.js';
 import templateRoutes from './routes/templateRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
 
 dotenv.config();
 
@@ -23,6 +25,8 @@ app.use('/api/admin', adminAuthRoutes);
 app.use('/api/user', userAuthRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Connect to MongoDB and start server
 connectDB().then(() => {

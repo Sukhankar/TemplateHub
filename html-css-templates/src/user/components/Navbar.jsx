@@ -67,13 +67,18 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="text-2xl text-gray-700 hover:text-blue-600"
+                className="flex items-center space-x-2 focus:outline-none"
               >
-                <FaUserCircle />
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                  {user?.email?.charAt(0)?.toUpperCase() || "U"}
+                </div>
               </button>
 
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 bg-white border rounded shadow p-3 w-48 z-50">
+                  <div className="text-xs text-gray-500 mb-2 truncate">
+                    {user?.email || "No email"}
+                  </div>
                   <Link
                     to="/profile"
                     className="block text-gray-700 hover:text-blue-600 text-sm mb-2"
@@ -93,7 +98,7 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/login" className="text-blue-600 text-sm">Login</Link>
-              <Link to="/signup" className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">Signup</Link>
+              <Link to="/register" className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">Signup</Link>
             </>
           )}
         </div>
@@ -148,7 +153,7 @@ const Navbar = () => {
             ) : (
               <>
                 <Link to="/login" className="block text-blue-600" onClick={() => setMobileMenuOpen(false)}>Login</Link>
-                <Link to="/signup" className="block text-blue-600" onClick={() => setMobileMenuOpen(false)}>Signup</Link>
+                <Link to="/register" className="block text-blue-600" onClick={() => setMobileMenuOpen(false)}>Signup</Link>
               </>
             )}
           </div>

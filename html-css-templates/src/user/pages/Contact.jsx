@@ -1,13 +1,35 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Contact = () => {
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("");
+
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("");
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/contact", form);
+      setStatus("Message sent successfully!");
+      setForm({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      setStatus("Failed to send message. Try again.");
+    }
+  };
 
   return (
     <>
@@ -19,34 +41,44 @@ const Contact = () => {
             Got a question, suggestion, or just want to say hi? Drop us a message below!
           </p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block mb-1 text-sm font-medium">Name</label>
               <input
+                name="name"
                 type="text"
                 placeholder="Your Name"
                 className="w-full border rounded px-3 py-2"
+                value={form.name}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label className="block mb-1 text-sm font-medium">Email</label>
               <input
+                name="email"
                 type="email"
                 placeholder="you@example.com"
                 className="w-full border rounded px-3 py-2"
+                value={form.email}
+                onChange={handleChange}
                 required
               />
             </div>
             <div>
               <label className="block mb-1 text-sm font-medium">Message</label>
               <textarea
+                name="message"
                 rows="5"
                 placeholder="Type your message..."
                 className="w-full border rounded px-3 py-2"
+                value={form.message}
+                onChange={handleChange}
                 required
               ></textarea>
             </div>
+            {status && <p className="text-sm text-center text-blue-600">{status}</p>}
             <button
               type="submit"
               className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
