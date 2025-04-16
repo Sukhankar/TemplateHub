@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
-import API from "/src/admin/api/adminapi";
+import API from "/src/admin/api/adminApi";
 
 const AdminLogin = () => {
   const { login } = useAdminAuth();
