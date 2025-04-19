@@ -23,7 +23,7 @@ const TemplateCard = ({ template }) => {
 
       <Link to={`/template/${template._id}`}>
         <img
-          src={template.image}
+          src={`${import.meta.env.VITE_API_BASE_URL}${template.image}`}
           alt={template.title}
           className="w-full h-48 object-cover"
         />

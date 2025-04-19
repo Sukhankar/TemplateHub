@@ -40,7 +40,7 @@ const TemplateDetail = () => {
   }, [id]);
 
   const handlePreview = async () => {
-    const res = await fetch(`http://localhost:5000/api/preview/${template._id}`);
+    const res = await fetch(`/preview/${template._id}`);
     const data = await res.json();
     setPreviewUrl(data.previewUrl);
   };
@@ -66,7 +66,7 @@ const TemplateDetail = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <img
-                  src={template.image}
+                  src={`${import.meta.env.VITE_API_BASE_URL}${template.image}`}
                   alt={template.title}
                   className="rounded-lg"
                   style={{

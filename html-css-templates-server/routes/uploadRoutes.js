@@ -6,7 +6,9 @@ const router = express.Router();
 router.post('/', upload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-  const fileUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
+  // Normalize path to use forward slashes
+  const normalizedPath = req.file.path.replace(/\\/g, '/');
+  const fileUrl = `/${normalizedPath}`; // Ensure it's a valid URL path
   res.status(200).json({ url: fileUrl });
 });
 

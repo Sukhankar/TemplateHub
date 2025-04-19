@@ -21,7 +21,6 @@ const TemplateDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [template, setTemplate] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addToCart } = useCart();
@@ -42,7 +41,11 @@ const TemplateDetails = () => {
       try {
         if (!id) throw new Error("Template ID is undefined");
         const { data } = await API.get(`/templates/${id}`);
-        setTemplate(data);
+        setTemplate({
+          ...data,
+          image: `${import.meta.env.VITE_API_BASE_URL}${data.image}`,
+          zipfile: `${import.meta.env.VITE_API_BASE_URL}${data.zipfile}`
+        });
       } catch (error) {
         console.error("Error fetching template:", error);
         setError(error.message || "Failed to load template");

@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve uploaded files statically
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/admin', adminAuthRoutes);

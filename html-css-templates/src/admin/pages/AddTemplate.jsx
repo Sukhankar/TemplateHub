@@ -12,6 +12,7 @@ const AddTemplate = () => {
   const recommendedDevices = ["Desktop", "Tablet", "Mobile"];
   const recommendedTech = ["HTML5", "CSS3", "JavaScript", "React", "Tailwind", "Node.js"];
   const recommendedTags = ["portfolio", "developer", "modern", "responsive", "clean", "dark-mode"];
+  const recommendedCategories = ["Portfolio", "Business", "E-commerce", "Blog", "Landing Page"];
 
   const [form, setForm] = useState({
     title: "",
@@ -31,6 +32,7 @@ const AddTemplate = () => {
 
   const [imageFile, setImageFile] = useState(null);
   const [zipFile, setZipFile] = useState(null);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -39,6 +41,11 @@ const AddTemplate = () => {
     } else {
       setForm({ ...form, [name]: value });
     }
+  };
+
+  const handleCategorySelect = (category) => {
+    setForm({ ...form, category });
+    setShowCategoryMenu(false);
   };
 
   const handleMultiCheckbox = (name, value) => {
@@ -126,7 +133,32 @@ const AddTemplate = () => {
         <h2 className="text-2xl font-bold mb-6">➕ Add New Template</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4" encType="multipart/form-data">
           <input type="text" name="title" placeholder="Title" className="border p-2" value={form.title} onChange={handleChange} />
-          <input type="text" name="category" placeholder="Category" className="border p-2" value={form.category} onChange={handleChange} />
+          
+          {/* Category Select with Menu */}
+          <div className="relative">
+            <input
+              type="text"
+              name="category"
+              placeholder="Category"
+              className="border p-2 w-full"
+              value={form.category}
+              onChange={handleChange}
+              onFocus={() => setShowCategoryMenu(true)}
+            />
+            {showCategoryMenu && (
+              <div className="absolute z-10 mt-1 w-full bg-white border rounded shadow-lg">
+                {recommendedCategories.map((category) => (
+                  <div
+                    key={category}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleCategorySelect(category)}
+                  >
+                    {category}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
           <input type="number" name="price" placeholder="Price" className="border p-2" value={form.price} onChange={handleChange} />
           <input type="text" name="demoUrl" placeholder="Demo URL" className="border p-2" value={form.demoUrl} onChange={handleChange} />
