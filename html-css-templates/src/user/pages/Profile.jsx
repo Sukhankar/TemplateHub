@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
+import Loader from "../components/Loading";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -27,6 +28,8 @@ const Profile = () => {
     fetchDownloads();
   }, [user]);
 
+  if (loading) return <Loader />;
+
   if (!user) {
     return (
       <>
@@ -49,9 +52,7 @@ const Profile = () => {
           <p><strong>Email:</strong> {user?.email || "No email available"}</p>
 
           <h3 className="text-xl font-semibold mt-6 mb-2">📥 Downloads</h3>
-          {loading ? (
-            <p className="text-gray-500">Loading downloads...</p>
-          ) : downloadedTemplates.length === 0 ? (
+          {downloadedTemplates.length === 0 ? (
             <p className="text-gray-500">No templates downloaded yet.</p>
           ) : (
             <ul className="space-y-4 mt-3">

@@ -3,10 +3,11 @@ import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
-import { ShoppingCart, Heart, Menu, X } from "lucide-react";
+import { ShoppingCart, BookMarkedIcon, Menu, X} from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
+import Switch from "./Dark_light_button";
 
-const Navbar = () => {
+const Navbar = ({ scrollToAbout, scrollToContact }) => {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
   const { wishlist } = useWishlist();
@@ -32,92 +33,155 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 dark:bg-gray-800">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-blue-600">TemplateHub</Link>
+        <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-gray-200">TemplateHub</Link>
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/templates" className="text-gray-7 hover:text-blue-600">Templates</Link>
-          <Link to="/about" className="text-gray-700 hover:text-blue-600">About</Link>
-          <Link to="/contact" className="text-gray-700 hover:text-blue-600">Contact</Link>
+          <div className="relative group">
+            <Link to="/templates" className="text-gray-700 hover:text-blue-600 dark:text-gray-200">
+              Templates
+            </Link>
+            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+              Browse templates
+            </span>
+          </div>
+
+          <div className="relative group">
+            <button
+              onClick={scrollToAbout}
+              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+            >
+              About
+            </button>
+            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+              Learn about us
+            </span>
+          </div>
+
+          <div className="relative group">
+            <button
+              onClick={scrollToContact}
+              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+            >
+              Contact
+            </button>
+            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+              Get in touch
+            </span>
+          </div>
 
           {/* Wishlist */}
-          <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600">
-            <Heart className="w-5 h-5" />
-            {wishlist.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
-                {wishlist.length}
-              </span>
-            )}
-          </Link>
+          <div className="relative group">
+            <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
+            </Link>
+            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+              View your bookmarks
+            </span>
+          </div>
 
           {/* Cart */}
-          <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
-            <ShoppingCart className="w-5 h-5" />
-            {cartItems.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
-                {cartItems.length}
-              </span>
-            )}
-          </Link>
+          <div className="relative group">
+            <Link to="/cart" className="relative text-gray-700 hover:text-blue-600 dark:text-gray-200">
+              <ShoppingCart className="w-5 h-5" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
+                  {cartItems.length}
+                </span>
+              )}
+            </Link>
+            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+              View your cart
+            </span>
+          </div>
 
           {/* User Avatar Dropdown */}
           {user ? (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center space-x-2 focus:outline-none"
-              >
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  {user?.email?.charAt(0)?.toUpperCase() || "U"}
-                </div>
-              </button>
-
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 bg-white border rounded shadow p-3 w-48 z-50">
-                  <div className="text-xs text-gray-500 mb-2 truncate">
-                    {user?.email || "No email"}
+            <div className="relative group">
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center space-x-2 focus:outline-none"
+                >
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {user?.email?.charAt(0)?.toUpperCase() || "U"}
                   </div>
-                  <Link
-                    to="/profile"
-                    className="block text-gray-700 hover:text-blue-600 text-sm mb-2"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="text-red-500 text-sm hover:underline"
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 bg-white border rounded shadow p-3 w-48 z-50 dark:bg-gray-800">
+                    <div className="text-xs text-gray-500 mb-2 truncate dark:text-gray-200">
+                      {user?.email || "No email"}
+                    </div>
+                    <Link
+                      to="/profile"
+                      className="block text-gray-700 hover:text-blue-600 text-sm mb-2 dark:text-gray-200"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="text-red-500 text-sm hover:underline"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+              <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                Manage your account
+              </span>
             </div>
           ) : (
             <>
-              <Link to="/login" className="text-blue-600 text-sm">Login</Link>
-              <Link to="/register" className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">Signup</Link>
+              <div className="relative group">
+                <Link to="/login" className="text-blue-600 text-sm dark:text-gray-200">
+                  Login
+                </Link>
+                <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                  Login to your account
+                </span>
+              </div>
+              <div className="relative group">
+                <Link to="/register" className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">
+                  Signup
+                </Link>
+                <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                  Create a new account
+                </span>
+              </div>
             </>
           )}
+          {/* Add the Switch component */}
+          <div className="relative group">
+            <Switch />
+            <span className="absolute left-1/2 transform -translate-x-1/2 -translate-y-8 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
+              Toggle dark/light mode
+            </span>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center space-x-4">
+        <div className="md:hidden flex items-center space-x-1">
+          {/* Add the Switch component */}
+          <div className="scale-50"> {/* Scale down the Switch for mobile */}
+            <Switch />
+          </div>
+
           {/* Wishlist */}
-          <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600">
-            <Heart className="w-5 h-5" />
+          <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
+          <BookMarkedIcon className="w-4 h-4" /> {/* Smaller icon for mobile */}
             {wishlist.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
                 {wishlist.length}
               </span>
             )}
           </Link>
 
           {/* Cart */}
-          <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
-            <ShoppingCart className="w-5 h-5" />
+          <Link to="/cart" className="relative text-gray-700 hover:text-blue-600 dark:text-gray-200">
+            <ShoppingCart className="w-4 h-4" /> {/* Smaller icon for mobile */}
             {cartItems.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
                 {cartItems.length}
@@ -127,22 +191,22 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="p-2 text-gray-700"
+            className="p-1 text-gray-700 dark:text-gray-200" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />} {/* Smaller icons */}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg p-4 space-y-4">
-            <Link to="/templates" className="block text-gray-700 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>Templates</Link>
-            <Link to="/about" className="block text-gray-700 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>About</Link>
-            <Link to="/contact" className="block text-gray-700 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg p-4 space-y-4 dark:bg-gray-800">
+            <Link to="/templates" className="block text-gray-700 hover:text-blue-600 dark:text-gray-200" onClick={() => setMobileMenuOpen(false)}>Templates</Link>
+            <Link to="/about" className="block text-gray-700 hover:text-blue-600 dark:text-gray-200" onClick={() => setMobileMenuOpen(false)}>About</Link>
+            <Link to="/contact" className="block text-gray-700 hover:text-blue-600 dark:text-gray-200" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
             {user ? (
               <>
-                <Link to="/profile" className="block text-gray-700 hover:text-blue-600" onClick={() => setMobileMenuOpen(false)}>Profile</Link>
+                <Link to="/profile" className="block text-gray-700 hover:text-blue-600 dark:text-gray-200" onClick={() => setMobileMenuOpen(false)}>Profile</Link>
                 <button
                   onClick={handleLogout}
                   className="text-red-500 hover:underline"
@@ -152,10 +216,11 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/login" className="block text-blue-600" onClick={() => setMobileMenuOpen(false)}>Login</Link>
-                <Link to="/register" className="block text-blue-600" onClick={() => setMobileMenuOpen(false)}>Signup</Link>
+                <Link to="/login" className="block text-blue-600 dark:text-gray-200" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                <Link to="/register" className="block text-blue-600 dark:text-gray-200" onClick={() => setMobileMenuOpen(false)}>Signup</Link>
               </>
             )}
+            
           </div>
         )}
       </div>

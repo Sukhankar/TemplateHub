@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useState } from "react";
+import Loader from "../components/Loading";
 
 const Checkout = () => {
   const { cartItems, clearCart } = useCart();
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -20,12 +22,20 @@ const Checkout = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("✅ Payment Successful! Thank you for your purchase.");
-    clearCart();
-    navigate("/");
+    setLoading(true);
+    try {
+      // Simulate payment process
+      alert("✅ Payment Successful! Thank you for your purchase.");
+      clearCart();
+      navigate("/");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) return <Loader />;
 
   return (
     <>

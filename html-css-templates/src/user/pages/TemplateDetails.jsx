@@ -8,6 +8,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import API from "../userapi/userapi";
+import Loader from "../components/Loading";
 
 import ImageDisplay from "../components/template/ImageDisplay";
 import TemplateInfo from "../components/template/TemplateInfo";
@@ -90,7 +91,7 @@ const TemplateDetails = () => {
     window.location.href = template.zipfile;
   };
 
-  if (loading) return <div className="text-center py-10">Loading template...</div>;
+  if (loading) return <Loader />;
 
   if (error || !template) {
     return (
