@@ -1,12 +1,13 @@
-import { useEffect, useState, useRef } from 'react';
-import Navbar from '../components/Navbar';
-import HeroSection from '../components/HeroSection';
-import TemplateCard from '../components/TemplateCard';
-import Footer from '../components/Footer';
-import API from '../userapi/userapi';
+import { useEffect, useState, useRef } from "react";
+import Navbar from "../components/Navbar";
+import HeroSection from "../components/HeroSection";
+import TemplateCard from "../components/TemplateCard";
+import Footer from "../components/Footer";
+import API from "../userapi/userapi";
 import Loader from "../components/Loading";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import About from "./About";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,10 +28,10 @@ const Home = () => {
   useEffect(() => {
     const fetchFeaturedTemplates = async () => {
       try {
-        const response = await API.get('/templates/featured');
+        const response = await API.get("/templates/featured");
         setFeaturedTemplates(response.data);
       } catch (error) {
-        console.error('Error fetching featured templates:', error);
+        console.error("Error fetching featured templates:", error);
       } finally {
         setLoading(false);
       }
@@ -40,24 +41,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // GSAP animation for the About section
-    gsap.fromTo(
-      aboutRef.current,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: aboutRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play reverse play reverse", // Replays animation on scroll up and down
-        },
-      }
-    );
-
     // GSAP animation for the Contact section
     gsap.fromTo(
       contactRef.current,
@@ -71,7 +54,7 @@ const Home = () => {
           trigger: contactRef.current,
           start: "top 80%",
           end: "bottom 20%",
-          toggleActions: "play reverse play reverse", // Replays animation on scroll up and down
+          toggleActions: "play reverse play reverse",
         },
       }
     );
@@ -84,7 +67,9 @@ const Home = () => {
 
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12" data-aos="fade-up">Featured Templates</h2>
+          <h2 className="text-3xl font-bold text-center mb-12" data-aos="fade-up">
+            Featured Templates
+          </h2>
           {loading ? (
             <Loader />
           ) : (
@@ -98,21 +83,7 @@ const Home = () => {
       </section>
 
       {/* About Section */}
-      <section
-        ref={aboutRef}
-        className="py-20 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-gray-700"
-      >
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6 text-blue-600">About Us</h2>
-          <p className="text-lg leading-relaxed mb-6">
-            We craft modern and responsive HTML/CSS templates to help developers and creators launch faster. 
-            Our mission is to make beautiful UI templates affordable and accessible for everyone.
-          </p>
-          <p className="text-lg leading-relaxed">
-            Built with ❤️ by passionate front-end designers and developers. Every template is optimized for SEO, performance, and modern best practices.
-          </p>
-        </div>
-      </section>
+      <About ref={aboutRef} />
 
       {/* Contact Section */}
       <section

@@ -75,6 +75,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           {/* Wishlist */}
           <div className="relative group">
             <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
+              <BookMarkedIcon className="w-5 h-5" />
             </Link>
             <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
               View your bookmarks
@@ -170,7 +171,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           </div>
 
           {/* Wishlist */}
-          <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
+          <Link to="/wishlist" className="relative text-gray-400 hover:text-red-600 dark:text-gray-100">
           <BookMarkedIcon className="w-4 h-4" /> {/* Smaller icon for mobile */}
             {wishlist.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
