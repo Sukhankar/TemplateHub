@@ -6,13 +6,13 @@ import { useEffect } from "react";
 
 const About = () => {
   useEffect(() => {
-    AOS.init({ duration: 800 });
+    AOS.init({ duration: 500 });
   }, []);
 
   return (
     <>
       <Navbar />
-      <section className="pt-28 pb-20 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-gray-700">
+      <section className="pt-28 pb-20 bg-white text-gray-700">
         <div className="max-w-6xl mx-auto px-6 text-center" data-aos="fade-up">
           <h1 className="text-5xl font-extrabold text-blue-600 mb-6">About Us</h1>
           <p className="text-lg leading-relaxed mb-6">

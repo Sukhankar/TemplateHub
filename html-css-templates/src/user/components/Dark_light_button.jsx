@@ -2,23 +2,43 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Switch = () => {
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme ? savedTheme === "dark" : false;
+  });
 
+  // Apply theme based on isDarkMode state
   useEffect(() => {
-    // Apply the theme based on the toggle state
+    const htmlElement = document.documentElement;
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      htmlElement.style.filter = "invert(1) hue-rotate(180deg)";
+      document.querySelectorAll("img").forEach(img => {
+        img.style.filter = "invert(1) hue-rotate(180deg)";
+      });
       localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      htmlElement.style.filter = "";
+      document.querySelectorAll("img").forEach(img => {
+        img.style.filter = "";
+      });
       localStorage.setItem("theme", "light");
     }
   }, [isDarkMode]);
 
+  // Apply theme on initial load
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const htmlElement = document.documentElement;
+    if (savedTheme === "dark") {
+      htmlElement.style.filter = "invert(1) hue-rotate(180deg)";
+      document.querySelectorAll("img").forEach(img => {
+        img.style.filter = "invert(1) hue-rotate(180deg)";
+      });
+    }
+  }, []);
+
   const handleToggle = () => {
-    setIsDarkMode((prevMode) => !prevMode);
+    setIsDarkMode(prev => !prev);
   };
 
   return (

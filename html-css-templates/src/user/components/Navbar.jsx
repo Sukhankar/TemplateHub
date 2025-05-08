@@ -33,14 +33,14 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
   }, []);
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 dark:bg-gray-800">
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-gray-200">TemplateHub</Link>
+        <Link to="/" className="text-2xl font-bold text-blue-600">TemplateHub</Link>
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
           <div className="relative group">
-            <Link to="/templates" className="text-gray-700 hover:text-blue-600 dark:text-gray-200">
+            <Link to="/templates" className="text-gray-700 hover:text-blue-600">
               Templates
             </Link>
             <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
@@ -51,7 +51,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           <div className="relative group">
             <button
               onClick={scrollToAbout}
-              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+              className="text-gray-700 hover:text-blue-600"
             >
               About
             </button>
@@ -63,7 +63,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           <div className="relative group">
             <button
               onClick={scrollToContact}
-              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+              className="text-gray-700 hover:text-blue-600"
             >
               Contact
             </button>
@@ -74,7 +74,8 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
 
           {/* Wishlist */}
           <div className="relative group">
-            <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
+            <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600">
+              <BookMarkedIcon className="w-5 h-5" />
             </Link>
             <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
               View your bookmarks
@@ -83,7 +84,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
 
           {/* Cart */}
           <div className="relative group">
-            <Link to="/cart" className="relative text-gray-700 hover:text-blue-600 dark:text-gray-200">
+            <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
               <ShoppingCart className="w-5 h-5" />
               {cartItems.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
@@ -109,13 +110,13 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
                   </div>
                 </button>
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border rounded shadow p-3 w-48 z-50 dark:bg-gray-800">
-                    <div className="text-xs text-gray-500 mb-2 truncate dark:text-gray-200">
+                  <div className="absolute right-0 mt-2 bg-white border rounded shadow p-3 w-48 z-50">
+                    <div className="text-xs text-gray-500 mb-2 truncate">
                       {user?.email || "No email"}
                     </div>
                     <Link
                       to="/profile"
-                      className="block text-gray-700 hover:text-blue-600 text-sm mb-2 dark:text-gray-200"
+                      className="block text-gray-700 hover:text-blue-600 text-sm mb-2"
                       onClick={() => setDropdownOpen(false)}
                     >
                       Profile
@@ -136,7 +137,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           ) : (
             <>
               <div className="relative group">
-                <Link to="/login" className="text-blue-600 text-sm dark:text-gray-200">
+                <Link to="/login" className="text-blue-600 text-sm">
                   Login
                 </Link>
                 <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
@@ -165,13 +166,13 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
         {/* Mobile Navigation */}
         <div className="md:hidden flex items-center space-x-1">
           {/* Add the Switch component */}
-          <div className="scale-50"> {/* Scale down the Switch for mobile */}
+          <div className="scale-50">
             <Switch />
           </div>
 
           {/* Wishlist */}
-          <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
-          <BookMarkedIcon className="w-4 h-4" /> {/* Smaller icon for mobile */}
+          <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600">
+          <BookMarkedIcon className="w-4 h-4" />
             {wishlist.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
                 {wishlist.length}
@@ -180,8 +181,8 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           </Link>
 
           {/* Cart */}
-          <Link to="/cart" className="relative text-gray-700 hover:text-blue-600 dark:text-gray-200">
-            <ShoppingCart className="w-4 h-4" /> {/* Smaller icon for mobile */}
+          <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
+            <ShoppingCart className="w-4 h-4" />
             {cartItems.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
                 {cartItems.length}
@@ -191,7 +192,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="p-1 text-gray-700 dark:text-gray-200" 
+            className="p-1 text-gray-700" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />} {/* Smaller icons */}

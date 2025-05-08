@@ -45,21 +45,21 @@ const Profile = () => {
   return (
     <>
       <Navbar />
-      <section className="pt-28 px-4 min-h-screen bg-gray-50">
-        <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow">
-          <h2 className="text-2xl font-bold mb-4">👤 Profile</h2>
-          <p><strong>Name:</strong> {user?.name || "No name available"}</p>
-          <p><strong>Email:</strong> {user?.email || "No email available"}</p>
+      <section className="pt-28 px-4 min-h-screen bg-white">
+        <div className="max-w-4xl mx-auto bg-gray-50 p-6 rounded-lg shadow-sm">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">👤 Profile</h2>
+          <p className="text-gray-700"><strong>Name:</strong> {user?.name || "No name available"}</p>
+          <p className="text-gray-700"><strong>Email:</strong> {user?.email || "No email available"}</p>
 
-          <h3 className="text-xl font-semibold mt-6 mb-2">📥 Downloads</h3>
+          <h3 className="text-xl font-semibold mt-6 mb-2 text-gray-900">📥 Downloads</h3>
           {downloadedTemplates.length === 0 ? (
             <p className="text-gray-500">No templates downloaded yet.</p>
           ) : (
             <ul className="space-y-4 mt-3">
               {downloadedTemplates.map((t) => (
-                <li key={t._id} className="flex justify-between items-center border-b pb-2">
+                <li key={t._id} className="flex justify-between items-center border-b pb-2 border-gray-200">
                   <div>
-                    <h4 className="font-semibold">{t.title}</h4>
+                    <h4 className="font-semibold text-gray-800">{t.title}</h4>
                     <p className="text-sm text-gray-500">{t.category}</p>
                   </div>
                   <div className="flex gap-3">
@@ -72,7 +72,7 @@ const Profile = () => {
                     <a
                       href={t.zipfile}
                       download
-                      className="bg-green-500 text-white text-sm px-3 py-1 rounded"
+                      className="bg-green-500 text-white text-sm px-3 py-1 rounded hover:bg-green-600 transition-colors"
                     >
                       Download
                     </a>

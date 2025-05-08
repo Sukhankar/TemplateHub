@@ -24,8 +24,8 @@ const Tooltip = () => {
 
 const StyledWrapper = styled.div`
   .tooltip {
-    --bg: #fff;
-    --cl: red;
+    --bg: #ffffff;
+    --cl: #ff4444;
     --sz: 1rem;
     --sizer: 44px;
     --h-cnt: calc(var(--sz) * 2);
@@ -48,11 +48,11 @@ const StyledWrapper = styled.div`
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    border: 1px solid transparent;
+    border: 1px solid #e0e0e0;
     outline: none;
     box-shadow:
-      rgba(95, 95, 115, 0.25) 0px 2px 5px -1px,
-      rgba(255, 255, 255, 0.3) 0px 1px 3px -1px;
+      rgba(0, 0, 0, 0.1) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.05) 0px 1px 3px -1px;
   }
   .trigger .heart {
     --sizer: 30px;
@@ -123,7 +123,7 @@ const StyledWrapper = styled.div`
     transform: scale(0) translate(0, 200%);
     font-weight: 600;
     background-color: var(--cl);
-    color: whitesmoke;
+    color: #ffffff;
   }
 
   .content::before {

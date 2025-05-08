@@ -82,9 +82,9 @@ const Home = () => {
       <Navbar scrollToAbout={scrollToAbout} scrollToContact={scrollToContact} />
       <HeroSection />
 
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12" data-aos="fade-up">Featured Templates</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800" data-aos="fade-up">Featured Templates</h2>
           {loading ? (
             <Loader />
           ) : (
@@ -100,7 +100,7 @@ const Home = () => {
       {/* About Section */}
       <section
         ref={aboutRef}
-        className="py-20 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-gray-700"
+        className="py-20 bg-gray-50 text-gray-800"
       >
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-6 text-blue-600">About Us</h2>
@@ -117,7 +117,7 @@ const Home = () => {
       {/* Contact Section */}
       <section
         ref={contactRef}
-        className="py-20 bg-white text-gray-700"
+        className="py-20 bg-white text-gray-800"
       >
         <div className="container mx-auto px-4 max-w-2xl text-center">
           <h2 className="text-4xl font-bold mb-6">Contact Us</h2>
@@ -129,7 +129,7 @@ const Home = () => {
               <input
                 type="text"
                 placeholder="Your Name"
-                className="w-full border rounded px-3 py-2"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
             </div>
@@ -137,7 +137,7 @@ const Home = () => {
               <input
                 type="email"
                 placeholder="Your Email"
-                className="w-full border rounded px-3 py-2"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
             </div>
@@ -145,13 +145,13 @@ const Home = () => {
               <textarea
                 rows="5"
                 placeholder="Your Message"
-                className="w-full border rounded px-3 py-2"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               ></textarea>
             </div>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors"
             >
               Send Message
             </button>

@@ -95,7 +95,7 @@ const TemplateDetails = () => {
 
   if (error || !template) {
     return (
-      <div className="text-center py-10">
+      <div className="text-center py-10 bg-white">
         <div className="text-red-500 mb-4">{error || "Template not found"}</div>
         <BackButton navigate={navigate} />
       </div>
@@ -105,7 +105,7 @@ const TemplateDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto px-6 pt-20 pb-10">
+      <div className="max-w-6xl mx-auto px-6 pt-20 pb-10 bg-white">
         <BackButton navigate={navigate} />
         <div className="grid md:grid-cols-2 gap-10 items-start" data-aos="fade-up">
           <ImageDisplay

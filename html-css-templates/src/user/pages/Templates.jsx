@@ -64,7 +64,7 @@ const Templates = () => {
       <Navbar />
       <section className="pt-32 pb-16 px-4 bg-white min-h-screen">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-10" data-aos="fade-up">
+          <h2 className="text-4xl font-bold text-center mb-10 text-gray-900" data-aos="fade-up">
             Browse HTML + CSS Templates
           </h2>
 
@@ -75,7 +75,7 @@ const Templates = () => {
           />
 
           {filteredTemplates.length === 0 ? (
-            <p className="text-center text-gray-500" data-aos="fade-up">
+            <p className="text-center text-gray-600" data-aos="fade-up">
               No templates found.
             </p>
           ) : (

@@ -37,14 +37,14 @@ const Register = () => {
   return (
     <>
       <Navbar />
-      <section className="pt-28 pb-20 px-4 bg-gray-50 min-h-screen">
-        <div className="max-w-md mx-auto bg-white p-6 rounded shadow">
-          <h2 className="text-2xl font-bold mb-4">Register</h2>
+      <section className="pt-28 pb-20 px-4 bg-white min-h-screen">
+        <div className="max-w-md mx-auto bg-gray-50 p-6 rounded shadow">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Register</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
               placeholder="Enter your name"
-              className="w-full border px-3 py-2 rounded"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -52,7 +52,7 @@ const Register = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full border px-3 py-2 rounded"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -60,7 +60,7 @@ const Register = () => {
             <input
               type="password"
               placeholder="Enter your password"
-              className="w-full border px-3 py-2 rounded"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -68,7 +68,7 @@ const Register = () => {
             {error && <div className="text-sm text-red-500 mb-2">{error}</div>}
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+              className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700 transition-colors"
             >
               Register
             </button>
