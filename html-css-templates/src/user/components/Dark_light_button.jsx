@@ -1,11 +1,35 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 
 const Switch = () => {
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    // Apply the theme based on the toggle state
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
+
+  const handleToggle = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
   return (
     <StyledWrapper>
       <label className="switch">
-        <input id="input" type="checkbox" defaultChecked="darkTheme" />
+        <input
+          id="input"
+          type="checkbox"
+          checked={isDarkMode}
+          onChange={handleToggle}
+        />
         <div className="slider round">
           <div className="sun-moon">
             <svg id="moon-dot-1" className="moon-dot" viewBox="0 0 100 100">
@@ -63,7 +87,7 @@ const Switch = () => {
       </label>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   .switch {

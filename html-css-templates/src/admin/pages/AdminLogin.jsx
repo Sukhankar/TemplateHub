@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import API from "/src/admin/api/adminApi";
+import Loader from "../../user/components/Loading";
 
 const AdminLogin = () => {
   const { login } = useAdminAuth();
@@ -24,6 +25,8 @@ const AdminLogin = () => {
       setLoading(false);
     }
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
