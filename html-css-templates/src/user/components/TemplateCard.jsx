@@ -6,7 +6,7 @@ const TemplateCard = ({ template }) => {
   const { toggleWishlist, isInWishlist } = useWishlist();
 
   return (
-    <div className="w-80 rounded-xl overflow-hidden shadow-lg relative bg-white">
+    <div className="w-80 rounded-xl overflow-hidden relative bg-white">
       {/* Image with overlay */}
       <div className="relative w-full h-48 overflow-hidden group cursor-pointer">
         <Link to={`/template/${template._id}`}>
@@ -105,3 +105,9 @@ const TemplateCard = ({ template }) => {
 };
 
 export default TemplateCard;
+
+
+
+
+
+
