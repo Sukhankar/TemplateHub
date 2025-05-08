@@ -12,24 +12,18 @@ const About = () => {
   return (
     <>
       <Navbar />
-      <section className="pt-28 px-4 pb-20 bg-white min-h-screen">
-        <div className="max-w-4xl mx-auto" data-aos="fade-up">
-          <h1 className="text-4xl font-bold mb-4 text-center">About Us</h1>
-          <p className="text-gray-600 mb-6 text-center">
+      <section className="pt-28 pb-20 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-gray-700">
+        <div className="max-w-6xl mx-auto px-6 text-center" data-aos="fade-up">
+          <h1 className="text-5xl font-extrabold text-blue-600 mb-6">About Us</h1>
+          <p className="text-lg leading-relaxed mb-6">
             We craft modern and responsive HTML/CSS templates to help developers and creators launch faster.
           </p>
-
-          <div className="space-y-6 text-gray-700 leading-relaxed">
-            <p>
-              Our mission is to make beautiful UI templates affordable and accessible for everyone. Whether you're a student, freelancer, or business owner, our hand-crafted templates help you build faster with clean, responsive code.
-            </p>
-            <p>
-              Every template is optimized for SEO, performance, and modern best practices. We believe in quality, accessibility, and open design — and our free and premium templates reflect that.
-            </p>
-            <p>
-              Built with ❤️ by passionate front-end designers and developers. We're constantly adding new designs — stay tuned!
-            </p>
-          </div>
+          <p className="text-lg leading-relaxed mb-6">
+            Our mission is to make beautiful UI templates affordable and accessible for everyone. Whether you're a student, freelancer, or business owner, our hand-crafted templates help you build faster with clean, responsive code.
+          </p>
+          <p className="text-lg leading-relaxed">
+            Built with ❤️ by passionate front-end designers and developers. Every template is optimized for SEO, performance, and modern best practices.
+          </p>
         </div>
       </section>
       <Footer />

@@ -16,6 +16,14 @@ const Home = () => {
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
 
+  const scrollToAbout = () => {
+    aboutRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToContact = () => {
+    contactRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
     const fetchFeaturedTemplates = async () => {
       try {
@@ -71,7 +79,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar scrollToAbout={scrollToAbout} scrollToContact={scrollToContact} />
       <HeroSection />
 
       <section className="py-20 bg-gray-50">
@@ -92,10 +100,10 @@ const Home = () => {
       {/* About Section */}
       <section
         ref={aboutRef}
-        className="py-20 bg-gray-100 text-gray-700"
+        className="py-20 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-gray-700"
       >
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">About Us</h2>
+          <h2 className="text-4xl font-bold mb-6 text-blue-600">About Us</h2>
           <p className="text-lg leading-relaxed mb-6">
             We craft modern and responsive HTML/CSS templates to help developers and creators launch faster. 
             Our mission is to make beautiful UI templates affordable and accessible for everyone.

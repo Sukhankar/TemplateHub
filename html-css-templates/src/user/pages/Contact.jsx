@@ -34,14 +34,14 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-      <section className="pt-28 px-4 pb-20 bg-gray-50 min-h-screen">
-        <div className="max-w-2xl mx-auto bg-white p-8 shadow rounded-lg" data-aos="fade-up">
-          <h1 className="text-3xl font-bold mb-6 text-center">Contact Us</h1>
+      <section className="pt-28 pb-20 bg-gray-50 min-h-screen">
+        <div className="max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg" data-aos="fade-up">
+          <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">Contact Us</h1>
           <p className="text-gray-600 mb-6 text-center">
             Got a question, suggestion, or just want to say hi? Drop us a message below!
           </p>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label className="block mb-1 text-sm font-medium">Name</label>
               <input
@@ -59,7 +59,7 @@ const Contact = () => {
               <input
                 name="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="Your Email"
                 className="w-full border rounded px-3 py-2"
                 value={form.email}
                 onChange={handleChange}

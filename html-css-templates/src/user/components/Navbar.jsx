@@ -7,7 +7,7 @@ import { ShoppingCart, BookMarkedIcon, Menu, X} from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
 import Switch from "./Dark_light_button";
 
-const Navbar = () => {
+const Navbar = ({ scrollToAbout, scrollToContact }) => {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
   const { wishlist } = useWishlist();
@@ -49,18 +49,24 @@ const Navbar = () => {
           </div>
 
           <div className="relative group">
-            <Link to="/about" className="text-gray-700 hover:text-blue-600 dark:text-gray-200">
+            <button
+              onClick={scrollToAbout}
+              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+            >
               About
-            </Link>
+            </button>
             <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
               Learn about us
             </span>
           </div>
 
           <div className="relative group">
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600 dark:text-gray-200">
+            <button
+              onClick={scrollToContact}
+              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+            >
               Contact
-            </Link>
+            </button>
             <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
               Get in touch
             </span>
@@ -69,12 +75,6 @@ const Navbar = () => {
           {/* Wishlist */}
           <div className="relative group">
             <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
-              <BookMarkedIcon className="w-5 h-5" />
-              {wishlist.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
-                  {wishlist.length}
-                </span>
-              )}
             </Link>
             <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
               View your bookmarks
