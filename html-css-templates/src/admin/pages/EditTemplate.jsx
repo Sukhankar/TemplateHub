@@ -6,7 +6,9 @@ import AdminNavbar from "../components/AdminNavbar";
 const EditTemplate = () => {
   const { id } = useParams();
   const [form, setForm] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const navigate = useNavigate();
+  const token = localStorage.getItem("adminToken");
 
   const recommendedLanguages = ["English", "Spanish", "French", "German", "Hindi"];
   const recommendedDevices = ["Desktop", "Tablet", "Mobile"];
@@ -27,6 +29,22 @@ const EditTemplate = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+  };
+
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
+  const uploadImageFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await API.post("/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.url;
   };
 
   const handleMultiCheckbox = (name, value) => {
@@ -51,13 +69,30 @@ const EditTemplate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedTemplate = {
-      ...form,
-      features: form.features.split(",").map(f => f.trim()),
-      tags: form.tags.split(",").map(tag => tag.trim()),
-    };
-    await API.put(`/templates/${id}`, updatedTemplate);
-    navigate("/admin/dashboard");
+    
+    try {
+      let imageUrl = form.image;
+      if (imageFile) {
+        imageUrl = await uploadImageFile(imageFile);
+      }
+
+      const updatedTemplate = {
+        ...form,
+        image: imageUrl,
+        features: form.features.split(",").map(f => f.trim()),
+        tags: form.tags.split(",").map(tag => tag.trim()),
+      };
+
+      await API.put(`/templates/${id}`, updatedTemplate, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      navigate("/admin/dashboard");
+    } catch (error) {
+      console.error("Error updating template:", error.response?.data || error.message);
+      alert("Failed to update template. Check your connection or credentials.");
+    }
   };
 
   if (!form) return <p className="p-6">Loading...</p>;
@@ -67,13 +102,40 @@ const EditTemplate = () => {
       <AdminNavbar />
       <div className="max-w-5xl mx-auto p-6">
         <h2 className="text-2xl font-bold mb-6">✏️ Edit Template</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4" encType="multipart/form-data">
           <input type="text" name="title" placeholder="Title" className="border p-2" value={form.title} onChange={handleChange} />
           <input type="text" name="category" placeholder="Category" className="border p-2" value={form.category} onChange={handleChange} />
           <input type="number" name="price" placeholder="Price" className="border p-2" value={form.price} onChange={handleChange} />
           <input type="text" name="demoUrl" placeholder="Demo URL" className="border p-2" value={form.demoUrl} onChange={handleChange} />
           <textarea name="description" placeholder="Description" className="border p-2 col-span-full" rows={3} value={form.description} onChange={handleChange} />
           <textarea name="features" placeholder="Features (comma-separated)" className="border p-2 col-span-full" rows={2} value={form.features} onChange={handleChange} />
+
+          {/* Image Upload */}
+          <label className="flex flex-col col-span-full">
+            Template Image
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleFileChange} 
+              className="mt-1" 
+            />
+          </label>
+
+          {/* Template Files */}
+          <div className="flex flex-col gap-1 col-span-full">
+            <label className="font-semibold">Template Files:</label>
+            <input 
+              type="text" 
+              name="zipfile" 
+              placeholder="Enter Zip File URL" 
+              className="border p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              value={form.zipfile} 
+              onChange={handleChange}
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Provide a direct download link to the template's zip file
+            </p>
+          </div>
 
           {/* --- Languages --- */}
           <div className="col-span-full">

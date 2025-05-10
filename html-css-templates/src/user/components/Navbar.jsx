@@ -67,8 +67,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
       cart: "View your cart",
       user: "Manage your account",
       login: "Login to your account",
-      signup: "Create a new account",
-      theme: "Toggle dark/light mode"
+      signup: "Create a new account"
     };
     return tooltips[element];
   };
@@ -249,17 +248,8 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
             </>
           )}
           {/* Add the Switch component */}
-          <div 
-            className="relative group"
-            onMouseEnter={() => handleMouseEnter('theme')}
-            onMouseLeave={handleMouseLeave}
-          >
+          <div className="relative">
             <Switch />
-            {hoveredElement === 'theme' && (
-              <span className="absolute left-1/2 transform -translate-x-1/2 -translate-y-8 bg-gray-800 text-white text-xs rounded px-2 py-1">
-                {getTooltip('theme')}
-              </span>
-            )}
           </div>
         </div>
 

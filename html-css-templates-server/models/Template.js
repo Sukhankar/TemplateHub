@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
-import { v4 as uuidv4 } from "uuid"; // Make sure to install this package if not already
+import { v4 as uuidv4 } from "uuid";
 
 const templateSchema = new mongoose.Schema({
   tempId: {
     type: String,
     unique: true,
-    default: () => uuidv4().split("-")[0], // Short UUID for readability
+    default: () => uuidv4().split("-")[0],
   },
   title: String,
   description: String,
   category: String,
   price: Number,
-  image: String,
-  zipfile: String, // This will hold the URL string to the zip file
+  image: String, // URL to uploaded image
+  zipfile: String, // URL to uploaded zip (optional)
   features: [String],
   featured: Boolean,
   languages: [String],
@@ -23,16 +23,6 @@ const templateSchema = new mongoose.Schema({
   isFavorite: Boolean,
   lastUpdated: String,
   downloads: Number,
-
-  // ✅ New fields
-  totalLikes: {
-    type: Number,
-    default: 0,
-  },
-  userViews: {
-    type: Number,
-    default: 0,
-  }
 });
 
 export default mongoose.model("Template", templateSchema);
