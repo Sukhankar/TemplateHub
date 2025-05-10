@@ -84,7 +84,7 @@ const Home = () => {
   }, []);
 
   return (
-    <>
+    <div className="bg-gradient-to-tr from-blue-50 via-purple-100 to-blue-50">
       <Navbar scrollToAbout={scrollToAbout} scrollToContact={scrollToContact} />
       <HeroSection />
 
@@ -193,7 +193,7 @@ const Home = () => {
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 };
 
