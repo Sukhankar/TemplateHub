@@ -1,9 +1,13 @@
+import { useState } from "react";
+import axios from "axios";
 import { useWishlist } from "../context/WishlistContext";
-import { FaHeart, FaRegHeart, FaRegBookmark } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const TemplateCard = ({ template }) => {
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const [likes, setLikes] = useState(template.totalLikes || 0);
+  const [liked, setLiked] = useState(false);
 
   return (
     <div className="w-80 rounded-xl overflow-hidden relative bg-white">
@@ -31,9 +35,30 @@ const TemplateCard = ({ template }) => {
               {template.title}
             </span>
             <div className="flex gap-2">
-              <div className="bg-white rounded-full p-2 shadow-md hover:scale-105 transition">
-                <FaRegBookmark className="text-gray-700 text-md" />
-              </div>
+              <button
+                className="bg-white rounded-full p-2 shadow-md hover:scale-105 transition"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (liked) return; // Prevent multiple likes per session (basic)
+
+                  try {
+                    const res = await axios.patch(
+                      `${import.meta.env.VITE_API_BASE_URL}/api/templates/${template._id}/like`
+                    );
+                    setLikes(res.data.totalLikes);
+                    setLiked(true);
+                  } catch (err) {
+                    console.error("Failed to like template:", err);
+                  }
+                }}
+                title="Like this template"
+              >
+                {liked ? (
+                  <FaHeart className="text-red-500 text-md" />
+                ) : (
+                  <FaRegHeart className="text-gray-700 text-md" />
+                )}
+              </button>
               <button
                 className="bg-white rounded-full p-2 shadow-md hover:scale-105 transition"
                 onClick={(e) => {
@@ -42,14 +67,14 @@ const TemplateCard = ({ template }) => {
                 }}
                 title={
                   isInWishlist(template._id)
-                    ? "Remove from Wishlist"
-                    : "Add to Wishlist"
+                    ? "Remove from Bookmarks"
+                    : "Add to Bookmarks"
                 }
               >
                 {isInWishlist(template._id) ? (
-                  <FaHeart className="text-red-500 text-md" />
+                  <FaBookmark className="text-blue-500 text-md" />
                 ) : (
-                  <FaRegHeart className="text-gray-700 text-md" />
+                  <FaRegBookmark className="text-gray-700 text-md" />
                 )}
               </button>
             </div>
@@ -75,8 +100,8 @@ const TemplateCard = ({ template }) => {
 
         <div className="flex items-center text-gray-600 text-sm gap-3">
           <span>
-            <FaHeart className="inline text-gray-500 mr-1" />
-            {template.likes || 0}
+            <FaHeart className="inline text-red-500 mr-1" />
+            {likes}
           </span>
           <span>👁 {template.views || "0"}</span>
         </div>
@@ -105,9 +130,4 @@ const TemplateCard = ({ template }) => {
 };
 
 export default TemplateCard;
-
-
-
-
-
 

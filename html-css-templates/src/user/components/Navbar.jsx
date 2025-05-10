@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { ShoppingCart, BookMarkedIcon, Menu, X} from "lucide-react";
@@ -12,6 +12,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
   const { cartItems } = useCart();
   const { wishlist } = useWishlist();
   const navigate = useNavigate();
+  const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -19,6 +20,22 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleAboutClick = () => {
+    if (location.pathname === "/") {
+      scrollToAbout();
+    } else {
+      navigate("/#about");
+    }
+  };
+
+  const handleContactClick = () => {
+    if (location.pathname === "/") {
+      scrollToContact();
+    } else {
+      navigate("/#contact");
+    }
   };
 
   // Close dropdown on outside click
@@ -33,7 +50,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
   }, []);
 
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-white/50 backdrop-blur-sm shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold text-blue-600">TemplateHub</Link>
         
@@ -50,7 +67,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
 
           <div className="relative group">
             <button
-              onClick={scrollToAbout}
+              onClick={handleAboutClick}
               className="text-gray-700 hover:text-blue-600"
             >
               About
@@ -62,7 +79,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
 
           <div className="relative group">
             <button
-              onClick={scrollToContact}
+              onClick={handleContactClick}
               className="text-gray-700 hover:text-blue-600"
             >
               Contact
@@ -76,6 +93,11 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           <div className="relative group">
             <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600">
               <BookMarkedIcon className="w-5 h-5" />
+              {wishlist.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
+                  {wishlist.length}
+                </span>
+              )}
             </Link>
             <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
               View your bookmarks
@@ -181,7 +203,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           </Link>
 
           {/* Cart */}
-          <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
+          <Link to="/cart" className="relative text-gray=700 hover:text-blue-600">
             <ShoppingCart className="w-4 h-4" />
             {cartItems.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">

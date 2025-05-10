@@ -4,7 +4,7 @@ import fs from 'fs';
 
 // Create uploads folder if it doesn't exist
 const createUploadFolders = () => {
-  const folders = ['uploads/images', 'uploads/zips'];
+  const folders = ['uploads/images'];
   folders.forEach((folder) => {
     if (!fs.existsSync(folder)) {
       fs.mkdirSync(folder, { recursive: true });
@@ -16,9 +16,7 @@ createUploadFolders();
 // Configure storage for multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const isImage = file.mimetype.startsWith('image/');
-    const uploadPath = isImage ? 'uploads/images' : 'uploads/zips';
-    cb(null, uploadPath);
+    cb(null, 'uploads/images');
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
@@ -32,17 +30,13 @@ const fileFilter = (req, file, cb) => {
     const allowedTypes = [
       'image/jpeg',
       'image/png',
-      'image/webp',
-      'application/zip',
-      'application/x-zip-compressed',
-      'multipart/x-zip',
-      'application/octet-stream'
+      'image/webp'
     ];
   
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only images and zip files are allowed'));
+      cb(new Error('Only image files are allowed'));
     }
   };  
 
@@ -50,6 +44,6 @@ export const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 50 * 1024 * 1024, // 10MB limit
+    fileSize: 50 * 1024 * 1024, // 50MB limit
   },
 });

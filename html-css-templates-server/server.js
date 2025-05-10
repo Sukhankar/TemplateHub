@@ -10,6 +10,7 @@ import templateRoutes from './routes/templateRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+//import cloudnaryroutes from './routes/cloudnaryroutes.js'
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/admin', adminAuthRoutes);
 app.use('/api/user', userAuthRoutes);
 app.use('/api/templates', templateRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use('/api/upload', uploadRoutes);  // for cloud use app.use('/api/upload', cloudnaryroutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
 

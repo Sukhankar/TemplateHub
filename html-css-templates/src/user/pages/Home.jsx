@@ -84,7 +84,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-tr from-blue-50 via-purple-100 to-blue-50">
+    <div className="bg-gradient-to-tr from-blue-50 via-purple-100 to-indigo-50">
       <Navbar scrollToAbout={scrollToAbout} scrollToContact={scrollToContact} />
       <HeroSection />
 
@@ -106,7 +106,7 @@ const Home = () => {
       {/* About Section */}
       <section
         ref={aboutRef}
-        className="py-20 bg-gradient-to-tr from-blue-50 via-purple-100 to-blue-50 text-gray-800"
+        className="py-20 bg-gradient-to-tr from-blue-50 via-purple-100 to-pink-50 text-gray-800"
       >
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
           {/* Left Content */}
@@ -150,7 +150,7 @@ const Home = () => {
       {/* Contact Section */}
       <section
         ref={contactRef}
-        className="py-20 bg-white text-gray-800"
+        className="py-20 bg-gradient-to-tr from-blue-50 via-purple-100 to-teal-50 text-gray-800"
       >
         <div className="container mx-auto px-4 max-w-2xl text-center">
           <h2 className="text-4xl font-bold mb-6">Contact Us</h2>

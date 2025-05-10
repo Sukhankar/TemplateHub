@@ -12,7 +12,7 @@ const templateSchema = new mongoose.Schema({
   category: String,
   price: Number,
   image: String,
-  zipfile: String,
+  zipfile: String, // This will hold the URL string to the zip file
   features: [String],
   featured: Boolean,
   languages: [String],
@@ -22,8 +22,17 @@ const templateSchema = new mongoose.Schema({
   tags: [String],
   isFavorite: Boolean,
   lastUpdated: String,
-  downloads: Number
+  downloads: Number,
+
+  // ✅ New fields
+  totalLikes: {
+    type: Number,
+    default: 0,
+  },
+  userViews: {
+    type: Number,
+    default: 0,
+  }
 });
 
 export default mongoose.model("Template", templateSchema);
-

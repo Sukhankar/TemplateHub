@@ -45,7 +45,7 @@ const TemplateDetails = () => {
         setTemplate({
           ...data,
           image: `${import.meta.env.VITE_API_BASE_URL}${data.image}`,
-          zipfile: `${import.meta.env.VITE_API_BASE_URL}${data.zipfile}`
+          zipfile: `${data.zipfile}`
         });
       } catch (error) {
         console.error("Error fetching template:", error);

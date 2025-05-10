@@ -12,7 +12,7 @@ const Wishlist = () => {
       <Navbar />
       <section className="pt-32 px-8 min-h-screen bg-white">
         <div className="container mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-gray-900">❤️ Your Wishlist</h1>
+          <h1 className="text-3xl font-bold mb-8 text-gray-900">❤️ Your Bookmarks</h1>
           {wishlist.length === 0 ? (
             <p className="text-gray-600 text-center py-8">No templates saved yet.</p>
           ) : (
