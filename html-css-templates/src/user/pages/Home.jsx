@@ -109,12 +109,13 @@ const Home = () => {
           {loading ? (
             <Loader />
           ) : (
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {featuredTemplates.map((template, index) => (
                 <div 
                   key={template.tempId}
                   data-aos="fade-up"
                   data-aos-delay={index * 100}
+                  className="px-4"
                 >
                   <TemplateCard template={template} />
                 </div>

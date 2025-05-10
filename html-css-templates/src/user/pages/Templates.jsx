@@ -78,7 +78,7 @@ const Templates = () => {
     <>
       <Navbar />
       <section className="pt-32 pb-16 px-4 bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen">
-        <div className="container mx-auto">
+        <div className="container mx-auto max-w-6xl">
           <h2 className="text-4xl font-bold text-center mb-10 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent" data-aos="fade-up">
             Browse HTML + CSS Templates
           </h2>
@@ -95,7 +95,7 @@ const Templates = () => {
               No templates found.
             </p>
           ) : (
-            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8 px-8">
               {filteredTemplates.map((template, index) => (
                 <div key={template._id} data-aos="fade-up" data-aos-delay={index * 100}>
                   <TemplateCard template={template} />
