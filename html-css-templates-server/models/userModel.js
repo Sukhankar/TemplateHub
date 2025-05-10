@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  likedTemplates: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Template'
+  }]
 });
 
 export default mongoose.model("User", userSchema);
