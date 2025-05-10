@@ -10,7 +10,7 @@ const TemplateCard = ({ template }) => {
   const [liked, setLiked] = useState(false);
 
   return (
-    <div className="w-80 rounded-xl overflow-hidden relative bg-white">
+    <div className="w-80 rounded-xl overflow-hidden relative bg-gradient-to-br from-indigo-50 to-purple-50">
       {/* Image with overlay */}
       <div className="relative w-full h-48 overflow-hidden group cursor-pointer">
         <Link to={`/template/${template._id}`}>
@@ -83,7 +83,7 @@ const TemplateCard = ({ template }) => {
       </div>
 
       {/* Footer with brand/team/likes/views */}
-      <div className="flex justify-between items-center px-4 py-3 bg-white">
+      <div className="flex justify-between items-center px-4 py-3 bg-gradient-to-br from-indigo-50 to-purple-50">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center text-white text-xs font-bold">
             {template.title?.charAt(0) || "T"}
@@ -108,7 +108,7 @@ const TemplateCard = ({ template }) => {
       </div>
 
       {/* Bottom section with price & preview button */}
-      <div className="px-4 pb-4 -mt-2">
+      <div className="px-4 pb-4 -mt-2 bg-gradient-to-br from-indigo-50 to-purple-50">
         <div className="flex justify-between items-center">
           <span
             className={`text-sm font-semibold ${
@@ -130,4 +130,3 @@ const TemplateCard = ({ template }) => {
 };
 
 export default TemplateCard;
-

@@ -4,6 +4,8 @@ import Footer from '../components/Footer';
 import TemplateCard from '../components/TemplateCard';
 import TemplateFilters from '../components/TemplateFilters';
 import API from '../userapi/userapi';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Templates = () => {
   const [templates, setTemplates] = useState([]);
@@ -11,11 +13,24 @@ const Templates = () => {
   const [category, setCategory] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
 
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
   useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+    
     const fetchTemplates = async () => {
       try {
         const { data } = await API.get('/templates');
-        setTemplates(data);
+        setTemplates(shuffleArray(data));
       } catch (error) {
         console.error('Error fetching templates:', error);
       }
@@ -62,9 +77,9 @@ const Templates = () => {
   return (
     <>
       <Navbar />
-      <section className="pt-32 pb-16 px-4 bg-white min-h-screen">
+      <section className="pt-32 pb-16 px-4 bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen">
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-10 text-gray-900" data-aos="fade-up">
+          <h2 className="text-4xl font-bold text-center mb-10 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent" data-aos="fade-up">
             Browse HTML + CSS Templates
           </h2>
 
@@ -72,6 +87,7 @@ const Templates = () => {
             onSearch={handleSearch}
             onCategoryChange={handleCategory}
             onPriceFilter={handlePrice}
+            data-aos="fade-up"
           />
 
           {filteredTemplates.length === 0 ? (
@@ -80,8 +96,10 @@ const Templates = () => {
             </p>
           ) : (
             <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
-              {filteredTemplates.map((template) => (
-                <TemplateCard key={template._id} template={template} />
+              {filteredTemplates.map((template, index) => (
+                <div key={template._id} data-aos="fade-up" data-aos-delay={index * 100}>
+                  <TemplateCard template={template} />
+                </div>
               ))}
             </div>
           )}

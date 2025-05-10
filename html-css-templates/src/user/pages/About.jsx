@@ -2,24 +2,43 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const About = () => {
   useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
 
+  const stats = [
+    { label: "Templates", end: 150 },
+    { label: "Users", end: 2000 },
+  ];
+
+  const [counters, setCounters] = useState(stats.map(() => 0));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounters((prev) =>
+        prev.map((val, i) => (val < stats[i].end ? val + Math.ceil(stats[i].end / 50) : stats[i].end))
+      );
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
-      <Navbar />
-      <section className="pt-28 pb-20 bg-gradient-to-tr from-blue-50 via-purple-100 to-blue-50 text-gray-800">
+    <section className="pt-28 pb-20 bg-gradient-to-tr from-blue-50 via-purple-100 to-blue-50 text-gray-800">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+          
           {/* Left Content */}
           <div className="w-full md:w-1/2" data-aos="fade-right">
             <h2 className="text-4xl font-bold mb-4 text-blue-700">About Us</h2>
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
+
+            {/* Typewriter effect */}
+            <h3 className="text-xl font-semibold mb-4 text-gray-800 animate-typing overflow-hidden whitespace-nowrap border-r-2 border-gray-700 pr-3">
               Creativity Meets Code — One Template at a Time.
             </h3>
+
             <p className="mb-4 text-gray-600">
               At <strong>DevCanvas</strong>, we merge design passion with development precision. Our platform offers professionally crafted HTML/CSS templates and a freelance hub where visionaries and coders collaborate.
             </p>
@@ -29,29 +48,34 @@ const About = () => {
             <p className="text-gray-600">
               Every pixel we deliver is optimized for performance, responsiveness, and user experience. Join us and turn your ideas into seamless digital realities.
             </p>
+
+            {/* Stats */}
+            <div className="mt-6 grid grid-cols-3 gap-4">
+              {stats.map((item, i) => (
+                <div key={i} className="text-center">
+                  <p className="text-3xl font-bold text-blue-600">{counters[i]}+</p>
+                  <p className="text-sm text-gray-700">{item.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right Image Collage */}
-          <div className="w-full md:w-1/2 flex justify-center gap-4" data-aos="fade-left">
-            <img
-              src="/assets/slice-1.png"
-              alt="Dev work slice 1"
-              className="w-24 rounded-3xl shadow-xl object-cover"
-            />
-            <img
-              src="/assets/slice-2.png"
-              alt="Dev work slice 2"
-              className="w-24 rounded-3xl shadow-xl object-cover"
-            />
-            <img
-              src="/assets/slice-3.png"
-              alt="Dev work slice 3"
-              className="w-24 rounded-3xl shadow-xl object-cover"
-            />
+          <div
+            className="w-full md:w-1/2 flex justify-center gap-4 flex-wrap"
+            data-aos="fade-left"
+          >
+            {["slice-1.png", "slice-2.png", "slice-3.png"].map((src, idx) => (
+              <img
+                key={idx}
+                src={`/assets/${src}`}
+                alt={`Dev work ${idx + 1}`}
+                className="w-24 rounded-3xl shadow-xl object-cover transform transition duration-300 hover:scale-110 hover:shadow-2xl"
+              />
+            ))}
           </div>
         </div>
       </section>
-      
     </>
   );
 };
