@@ -10,37 +10,55 @@ const Switch = () => {
   // Apply theme based on isDarkMode state
   useEffect(() => {
     const htmlElement = document.documentElement;
+
     if (isDarkMode) {
-      htmlElement.style.filter = "invert(1) hue-rotate(180deg)";
-      document.querySelectorAll("img").forEach(img => {
-        img.style.filter = "invert(1) hue-rotate(180deg)";
-      });
+      htmlElement.classList.add("dark-mode");
       localStorage.setItem("theme", "dark");
+      // Add global dark mode styles
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .dark-mode {
+          filter: invert(1) hue-rotate(180deg);
+        }
+        .dark-mode img {
+          filter: invert(1) hue-rotate(180deg);
+        }
+      `;
+      document.head.appendChild(style);
     } else {
-      htmlElement.style.filter = "";
-      document.querySelectorAll("img").forEach(img => {
-        img.style.filter = "";
-      });
+      htmlElement.classList.remove("dark-mode");
       localStorage.setItem("theme", "light");
+      // Remove global dark mode styles
+      const style = document.querySelector('style[data-dark-mode]');
+      if (style) {
+        style.remove();
+      }
     }
   }, [isDarkMode]);
 
-  // Apply theme on initial load
+  // On initial load
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const htmlElement = document.documentElement;
     if (savedTheme === "dark") {
-      htmlElement.style.filter = "invert(1) hue-rotate(180deg)";
-      document.querySelectorAll("img").forEach(img => {
-        img.style.filter = "invert(1) hue-rotate(180deg)";
-      });
+      htmlElement.classList.add("dark-mode");
+      // Add global dark mode styles
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .dark-mode {
+          filter: invert(1) hue-rotate(180deg);
+        }
+        .dark-mode img {
+          filter: invert(1) hue-rotate(180deg);
+        }
+      `;
+      document.head.appendChild(style);
     }
   }, []);
 
   const handleToggle = () => {
     setIsDarkMode(prev => !prev);
   };
-
   return (
     <StyledWrapper>
       <label className="switch">
