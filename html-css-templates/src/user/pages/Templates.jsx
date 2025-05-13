@@ -24,9 +24,9 @@ const Templates = () => {
   useEffect(() => {
     AOS.init({
       duration: 1000,
-      once: true
+      once: false,
     });
-    
+
     const fetchTemplates = async () => {
       try {
         const { data } = await API.get('/templates');
@@ -35,6 +35,7 @@ const Templates = () => {
         console.error('Error fetching templates:', error);
       }
     };
+
     fetchTemplates();
   }, []);
 
@@ -77,27 +78,37 @@ const Templates = () => {
   return (
     <>
       <Navbar />
-      <section className="pt-32 pb-16 px-4 bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl font-bold text-center mb-10 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent" data-aos="fade-up">
+
+      <section className="pt-20 md:pt-28 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen">
+        <div className="container mx-auto max-w-screen-xl">
+          <h2
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-6 sm:mb-10 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent"
+            data-aos="fade-up"
+          >
             Browse HTML + CSS Templates
           </h2>
 
-          <TemplateFilters
-            onSearch={handleSearch}
-            onCategoryChange={handleCategory}
-            onPriceFilter={handlePrice}
-            data-aos="fade-up"
-          />
+          <div data-aos="fade-up">
+            <TemplateFilters
+              onSearch={handleSearch}
+              onCategoryChange={handleCategory}
+              onPriceFilter={handlePrice}
+            />
+          </div>
 
           {filteredTemplates.length === 0 ? (
-            <p className="text-center text-gray-600" data-aos="fade-up">
+            <p className="text-center text-gray-600 text-sm sm:text-base mt-8" data-aos="fade-up">
               No templates found.
             </p>
           ) : (
-            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8 px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-8">
               {filteredTemplates.map((template, index) => (
-                <div key={template._id} data-aos="fade-up" data-aos-delay={index * 100}>
+                <div
+                  key={template._id}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
+                  className="w-full"
+                >
                   <TemplateCard template={template} />
                 </div>
               ))}
@@ -105,6 +116,7 @@ const Templates = () => {
           )}
         </div>
       </section>
+
       <Footer />
     </>
   );

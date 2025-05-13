@@ -18,6 +18,18 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
   const dropdownRef = useRef(null);
   const [hoveredElement, setHoveredElement] = useState(null);
 
+  // Auto logout after 2 hours
+  useEffect(() => {
+    const autoLogoutTimer = setTimeout(() => {
+      if (user) {
+        logout();
+        navigate("/login");
+      }
+    }, 2 * 60 * 60 * 1000); // 2 hours in milliseconds
+
+    return () => clearTimeout(autoLogoutTimer);
+  }, [user, logout, navigate]);
+
   const handleLogout = () => {
     logout();
     navigate("/login");
