@@ -244,7 +244,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
                 onMouseEnter={() => handleMouseEnter('login')}
                 onMouseLeave={handleMouseLeave}
               >
-                <Link to="/login" className="text-blue-600 text-sm">
+                <Link to="/login" className="text-white text-sm">
                   Login
                 </Link>
                 {hoveredElement === 'login' && (
