@@ -23,11 +23,7 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.0",
     "react-toastify": "^11.0.5",
-<<<<<<< HEAD
     "styled-components": "^6.1.19",
-=======
-    "styled-components": "^6.1.18",
->>>>>>> 143feb2afe79937a57602d99a94d5b41856189d7
     "uuid": "^11.1.0"
   },
   "devDependencies": {
