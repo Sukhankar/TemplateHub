@@ -6,6 +6,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { ShoppingCart, BookMarkedIcon, Menu, X} from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
 import Switch from "./Dark_light_button";
+import DevCanvasLogo from "../../assets/DevCanvasLogo.png"; // Adjust the path/filename as needed
 
 const Navbar = ({ scrollToAbout, scrollToContact }) => {
   const { user, logout } = useAuth();
@@ -85,9 +86,18 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
   };
 
   return (
-    <nav className="bg-white/50 backdrop-blur-sm shadow-md fixed top-0 left-0 right-0 z-50">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-blue-600">DevCanvas</Link>
+    <nav className="bg-black/25 backdrop-blur-sm shadow-md fixed top-0 left-0 right-0 z-50">
+  <div className="container mx-auto px-4 py-1 flex justify-between items-center">
+    <Link to="/" className="flex items-center space-x-2 group">
+      <img
+        src={DevCanvasLogo}
+        alt="DevCanvas Logo"
+        className="h-24 w-24 -my-6 object-contain transition-transform duration-300 group-hover:scale-105"
+        style={{ borderRadius: "0.5rem", background: "transparent" }}
+      />
+      {/* <span className="text-2xl font-bold text-blue-600 tracking-tight">DevCanvas</span> */}
+    </Link>
+
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
@@ -96,7 +106,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
             onMouseEnter={() => handleMouseEnter('templates')}
             onMouseLeave={handleMouseLeave}
           >
-            <Link to="/templates" className="text-gray-700 hover:text-blue-600">
+            <Link to="/templates" className="text-white hover:text-blue-600">
               Templates
             </Link>
             {hoveredElement === 'templates' && (
@@ -113,7 +123,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           >
             <button
               onClick={handleAboutClick}
-              className="text-gray-700 hover:text-blue-600"
+              className="text-white hover:text-blue-600"
             >
               About
             </button>
@@ -131,7 +141,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           >
             <button
               onClick={handleContactClick}
-              className="text-gray-700 hover:text-blue-600"
+              className="text-white hover:text-blue-600"
             >
               Contact
             </button>
@@ -148,7 +158,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
             onMouseEnter={() => handleMouseEnter('wishlist')}
             onMouseLeave={handleMouseLeave}
           >
-            <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600">
+            <Link to="/wishlist" className="relative text-white hover:text-red-600">
               <BookMarkedIcon className="w-5 h-5" />
               {wishlist.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
@@ -169,7 +179,7 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
             onMouseEnter={() => handleMouseEnter('cart')}
             onMouseLeave={handleMouseLeave}
           >
-            <Link to="/cart" className="relative text-gray-700 hover:text-blue-600">
+            <Link to="/cart" className="relative text-white hover:text-blue-600">
               <ShoppingCart className="w-5 h-5" />
               {cartItems.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
