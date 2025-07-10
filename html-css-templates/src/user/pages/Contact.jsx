@@ -4,6 +4,9 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Input from "../components/Input";
+import Textarea from "../components/Textarea";
+import { SendHorizonal } from "lucide-react";
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -22,68 +25,70 @@ const Contact = () => {
     setStatus("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/contact", form);
-      setStatus("Message sent successfully!");
+      await axios.post("http://localhost:5000/api/contact", form);
+      setStatus("✅ Message sent successfully!");
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
       console.error(err);
-      setStatus("Failed to send message. Try again.");
+      setStatus("❌ Failed to send message. Try again.");
     }
   };
 
   return (
     <>
       <Navbar />
-      <section className="pt-28 px-4 pb-20 bg-gray-50 min-h-screen">
-        <div className="max-w-2xl mx-auto bg-white p-8 shadow rounded-lg" data-aos="fade-up">
-          <h1 className="text-3xl font-bold mb-6 text-center">Contact Us</h1>
-          <p className="text-gray-600 mb-6 text-center">
+      <section className="pt-28 px-4 pb-20 bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen">
+        <div
+          className="max-w-3xl mx-auto bg-white/80 backdrop-blur-md shadow-2xl rounded-2xl p-10 border border-indigo-100"
+          data-aos="fade-up"
+        >
+          <h1 className="text-4xl font-extrabold mb-4 text-center text-indigo-700">
+            Contact Us
+          </h1>
+          <p className="text-gray-600 mb-8 text-center text-lg">
             Got a question, suggestion, or just want to say hi? Drop us a message below!
           </p>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label className="block mb-1 text-sm font-medium">Name</label>
-              <input
-                name="name"
-                type="text"
-                placeholder="Your Name"
-                className="w-full border rounded px-3 py-2"
-                value={form.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">Email</label>
-              <input
-                name="email"
-                type="email"
-                placeholder="you@example.com"
-                className="w-full border rounded px-3 py-2"
-                value={form.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">Message</label>
-              <textarea
-                name="message"
-                rows="5"
-                placeholder="Type your message..."
-                className="w-full border rounded px-3 py-2"
-                value={form.message}
-                onChange={handleChange}
-                required
-              ></textarea>
-            </div>
-            {status && <p className="text-sm text-center text-blue-600">{status}</p>}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              label="Full Name"
+              name="name"
+              type="text"
+              value={form.name}
+              onChange={handleChange}
+            />
+            <Input
+              label="Email"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+            />
+            <Textarea
+              label="Message"
+              name="message"
+              value={form.message}
+              onChange={handleChange}
+            />
+
+            {status && (
+              <p
+                className={`text-center text-sm font-medium ${
+                  status.includes("successfully")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {status}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+              className="group relative w-full flex justify-center items-center gap-2 bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-indigo-700 hover:scale-[1.02] transition-all duration-300"
             >
               Send Message
+              <SendHorizonal className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </form>
         </div>

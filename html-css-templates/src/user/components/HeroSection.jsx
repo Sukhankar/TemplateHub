@@ -1,46 +1,90 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import CardSwap, { Card } from "../components/CardSwap";
+
 const HeroSection = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    tl.fromTo(
+      sectionRef.current.querySelector(".hero-text"),
+      { opacity: 0, y: 50 },
+      { opacity: 1, y: 0, duration: 1 }
+    )
+      .fromTo(
+        sectionRef.current.querySelector(".hero-subtext"),
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1 },
+        "-=0.6"
+      )
+      .fromTo(
+        sectionRef.current.querySelector(".hero-buttons"),
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1 },
+        "-=0.4"
+      );
+  }, []);
+
   return (
-    <section className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white py-28 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white py-28 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto px-6 flex flex-col-reverse lg:flex-row items-center gap-12">
-        
         {/* Left Text Content */}
-        <div className="w-full lg:w-1/2 text-center lg:text-left" data-aos="fade-right">
-          <h1 className="text-5xl lg:text-6xl font-bold mb-6">
+        <div className="w-full lg:w-1/2 text-center lg:text-left">
+          <h1 className="text-5xl lg:text-6xl font-bold mb-6 hero-text">
             Craft Stunning Websites with Ease
           </h1>
-          <p className="text-lg mb-8 text-indigo-100">
+          <p className="text-lg mb-8 text-indigo-100 hero-subtext">
             Discover premium HTML/CSS templates and get custom development — all under one roof.
           </p>
-          <div className="flex justify-center lg:justify-start gap-4">
+          <div className="flex justify-center lg:justify-start gap-4 hero-buttons">
             <a
               href="/templates"
-              className="bg-white text-indigo-600 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition"
-              data-aos="zoom-in"
+              className="relative inline-block px-6 py-3 font-semibold text-indigo-600 bg-white rounded-full group overflow-hidden transition-all duration-300 hover:bg-gray-100"
             >
-              Browse Templates
+              <span className="relative z-10">Browse Templates</span>
+              <span className="absolute inset-0 bg-indigo-100 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100 z-0" />
             </a>
+
             <a
               href="/services"
-              className="bg-transparent border-2 border-white text-white font-semibold px-6 py-3 rounded-full hover:bg-white hover:text-indigo-600 transition"
-              data-aos="zoom-in"
-              data-aos-delay="200"
+              className="relative inline-block px-6 py-3 font-semibold text-white border-2 border-white rounded-full group overflow-hidden transition-all duration-300"
             >
-              Hire a Freelancer
+              <span className="relative z-10">Hire a Freelancer</span>
+              <span className="absolute inset-0 bg-white scale-x-0 origin-right transition-transform duration-300 group-hover:scale-x-100 z-0" />
+              <span className="absolute inset-0 group-hover:text-indigo-600 transition duration-300 z-10"></span>
             </a>
           </div>
         </div>
 
-        {/* Right Hero Graphic */}
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end" data-aos="fade-left">
-          <img
-            src="/assets/hero-devcanvas.png"
-            alt="DevCanvas hero graphic"
-            className="w-full max-w-md rounded-lg shadow-2xl"
-          />
+        {/* Right Hero Graphic with CardSwap */}
+        <div className="m-2 w-full lg:w-1/2 relative flex justify-center lg:justify-end pt-10">
+          <CardSwap
+            width={320}
+            height={220}
+            cardDistance={55}
+            verticalDistance={60}
+            delay={4000}
+            skewAmount={5}
+            easing="elastic"
+          >
+            <Card customClass="bg-white text-black flex items-center justify-center text-xl font-bold shadow-2xl">
+              Templates
+            </Card>
+            <Card customClass="bg-indigo-100 text-indigo-800 flex items-center justify-center text-xl font-bold shadow-2xl">
+              Freelancers
+            </Card>
+            <Card customClass="bg-purple-100 text-purple-800 flex items-center justify-center text-xl font-bold shadow-2xl">
+              Services
+            </Card>
+          </CardSwap>
         </div>
       </div>
 
-      {/* Decorative SVG overlay for more visual depth */}
+      {/* Decorative SVG */}
       <svg
         className="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 opacity-30"
         width="400"
