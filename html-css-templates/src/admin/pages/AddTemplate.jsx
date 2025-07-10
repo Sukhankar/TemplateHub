@@ -20,7 +20,7 @@ const AddTemplate = () => {
     category: "",
     price: 0,
     image: "",
-    zipfile: "",
+    zipfile: "", // direct URL string
     features: "",
     featured: false,
     languages: [],
@@ -31,16 +31,11 @@ const AddTemplate = () => {
   });
 
   const [imageFile, setImageFile] = useState(null);
-  const [zipFile, setZipFile] = useState(null);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setForm({ ...form, [name]: checked });
-    } else {
-      setForm({ ...form, [name]: value });
-    }
+    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
   };
 
   const handleCategorySelect = (category) => {
@@ -68,13 +63,12 @@ const AddTemplate = () => {
     }));
   };
 
-  const handleFileChange = (e, type) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (type === "image") setImageFile(file);
-    if (type === "zip") setZipFile(file);
+    setImageFile(file);
   };
 
-  const uploadFile = async (file) => {
+  const uploadImageFile = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     const res = await API.post("/upload", formData, {
@@ -91,19 +85,18 @@ const AddTemplate = () => {
 
     try {
       let imageUrl = form.image;
-      let zipUrl = form.zipfile;
-
-      if (imageFile) imageUrl = await uploadFile(imageFile);
-      if (zipFile) zipUrl = await uploadFile(zipFile);
+      if (imageFile) {
+        imageUrl = await uploadImageFile(imageFile);
+      }
 
       const newTemplate = {
-        tempId: uuidv4().split("-")[0], // short readable ID
+        tempId: uuidv4().split("-")[0],
         title: form.title,
         description: form.description,
         category: form.category,
         price: Number(form.price),
         image: imageUrl,
-        zipfile: zipUrl,
+        zipfile: form.zipfile, // using string directly
         features: form.features.split(",").map((f) => f.trim()),
         featured: form.featured,
         languages: form.languages,
@@ -133,8 +126,8 @@ const AddTemplate = () => {
         <h2 className="text-2xl font-bold mb-6">➕ Add New Template</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4" encType="multipart/form-data">
           <input type="text" name="title" placeholder="Title" className="border p-2" value={form.title} onChange={handleChange} />
-          
-          {/* Category Select with Menu */}
+
+          {/* Category input */}
           <div className="relative">
             <input
               type="text"
@@ -162,12 +155,12 @@ const AddTemplate = () => {
 
           <input type="number" name="price" placeholder="Price" className="border p-2" value={form.price} onChange={handleChange} />
           <input type="text" name="demoUrl" placeholder="Demo URL" className="border p-2" value={form.demoUrl} onChange={handleChange} />
-
+          
           <textarea name="description" placeholder="Description" className="border p-2 col-span-full" rows={3} value={form.description} onChange={handleChange} />
 
           <textarea name="features" placeholder="Features (comma-separated)" className="border p-2 col-span-full" rows={2} value={form.features} onChange={handleChange} />
 
-          {/* --- Languages --- */}
+          {/* Languages */}
           <div className="col-span-full">
             <label className="font-semibold">Languages:</label>
             <div className="flex flex-wrap gap-2 mt-2">
@@ -190,7 +183,7 @@ const AddTemplate = () => {
             />
           </div>
 
-          {/* --- Supported Devices --- */}
+          {/* Supported Devices */}
           <div className="col-span-full">
             <label className="font-semibold">Supported Devices:</label>
             <div className="flex gap-4 mt-2">
@@ -213,7 +206,7 @@ const AddTemplate = () => {
             />
           </div>
 
-          {/* --- Tech Stack --- */}
+          {/* Tech Stack */}
           <div className="col-span-full">
             <label className="font-semibold">Tech Stack:</label>
             <div className="flex flex-wrap gap-3 mt-2">
@@ -236,7 +229,7 @@ const AddTemplate = () => {
             />
           </div>
 
-          {/* --- Tags --- */}
+          {/* Tags */}
           <div className="col-span-full">
             <label className="font-semibold">Tags:</label>
             <div className="flex flex-wrap gap-3 mt-2">
@@ -245,9 +238,7 @@ const AddTemplate = () => {
                   <input
                     type="checkbox"
                     checked={form.tags.includes(tag)}
-                    onChange={() =>
-                      handleMultiCheckbox("tags", tag)
-                    }
+                    onChange={() => handleMultiCheckbox("tags", tag)}
                   />
                   {tag}
                 </label>
@@ -261,16 +252,28 @@ const AddTemplate = () => {
             />
           </div>
 
+          {/* Image Upload */}
           <label className="flex flex-col col-span-full">
             Template Image
-            <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, "image")} className="mt-1" />
+            <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1" />
           </label>
 
-          <label className="flex flex-col col-span-full">
-            Zip File
-            <input type="file" accept=".zip" onChange={(e) => handleFileChange(e, "zip")} className="mt-1" />
-          </label>
+          <div className="flex flex-col gap-1 col-span-full">
+            <label className="font-semibold">Template Files:</label>
+            <input 
+              type="text" 
+              name="zipfile" 
+              placeholder="Enter Zip File URL" 
+              className="border p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              value={form.zipfile} 
+              onChange={handleChange}
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Provide a direct download link to the template's zip file
+            </p>
+          </div>
 
+          {/* Featured */}
           <label className="flex items-center gap-2 col-span-full">
             <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
             Featured Template

@@ -8,6 +8,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import API from "../userapi/userapi";
+import Loader from "../components/Loading";
 
 import ImageDisplay from "../components/template/ImageDisplay";
 import TemplateInfo from "../components/template/TemplateInfo";
@@ -44,7 +45,7 @@ const TemplateDetails = () => {
         setTemplate({
           ...data,
           image: `${import.meta.env.VITE_API_BASE_URL}${data.image}`,
-          zipfile: `${import.meta.env.VITE_API_BASE_URL}${data.zipfile}`
+          zipfile: `${data.zipfile}`
         });
       } catch (error) {
         console.error("Error fetching template:", error);
@@ -90,11 +91,11 @@ const TemplateDetails = () => {
     window.location.href = template.zipfile;
   };
 
-  if (loading) return <div className="text-center py-10">Loading template...</div>;
+  if (loading) return <Loader />;
 
   if (error || !template) {
     return (
-      <div className="text-center py-10">
+      <div className="text-center py-10 bg-white">
         <div className="text-red-500 mb-4">{error || "Template not found"}</div>
         <BackButton navigate={navigate} />
       </div>
@@ -104,7 +105,7 @@ const TemplateDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto px-6 pt-20 pb-10">
+      <div className="max-w-6xl mx-auto px-6 pt-20 pb-10 bg-white">
         <BackButton navigate={navigate} />
         <div className="grid md:grid-cols-2 gap-10 items-start" data-aos="fade-up">
           <ImageDisplay

@@ -12,7 +12,11 @@ import Contact from './user/pages/Contact';
 import Login from './user/pages/Login';
 import Register from './user/pages/Register';
 import Profile from './user/pages/Profile';
+<<<<<<< HEAD
 
+=======
+import ProfileSetup from './user/pages/ProfileSetup';
+>>>>>>> 143feb2afe79937a57602d99a94d5b41856189d7
 import AdminLogin from './admin/pages/AdminLogin';
 import Dashboard from './admin/pages/Dashboard';
 import AddTemplate from './admin/pages/AddTemplate';
@@ -57,7 +61,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+<<<<<<< HEAD
 
+=======
+        <Route path="/profile-setup" element={<ProfileSetup />} />
+        
+>>>>>>> 143feb2afe79937a57602d99a94d5b41856189d7
         {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
