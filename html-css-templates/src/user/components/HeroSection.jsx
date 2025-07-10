@@ -45,17 +45,16 @@ const HeroSection = () => {
               href="/templates"
               className="relative inline-block px-6 py-3 font-semibold text-indigo-600 bg-white rounded-full group overflow-hidden transition-all duration-300 hover:bg-gray-100"
             >
-              <span className="relative z-10">Browse Templates</span>
-              <span className="absolute inset-0 bg-indigo-100 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100 z-0" />
+              <span className="relative z-10 group-hover:text-indigo-100 transition-colors duration-300">Browse Templates</span>
+              <span className="absolute inset-0 bg-black scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100 z-0" />
             </a>
 
             <a
               href="/services"
               className="relative inline-block px-6 py-3 font-semibold text-white border-2 border-white rounded-full group overflow-hidden transition-all duration-300"
             >
-              <span className="relative z-10">Hire a Freelancer</span>
+              <span className="relative z-10 group-hover:text-black transition-colors duration-300">Hire a Freelancer</span>
               <span className="absolute inset-0 bg-white scale-x-0 origin-right transition-transform duration-300 group-hover:scale-x-100 z-0" />
-              <span className="absolute inset-0 group-hover:text-indigo-600 transition duration-300 z-10"></span>
             </a>
           </div>
         </div>
