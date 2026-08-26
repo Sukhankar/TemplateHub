@@ -16,11 +16,18 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import seoRoutes from './routes/seoRoutes.js';
+import healthRoutes from './routes/healthRoutes.js';
 import { getSitemapXML, getRobotsTXT } from './controllers/seoController.js';
+import { authRateLimiter, apiRateLimiter, securityHeaders, globalErrorHandler } from './middleware/securityMiddleware.js';
 
 dotenv.config();
 
 const app = express();
+
+// Apply Security HTTP Headers & General Rate Limiter
+app.use(securityHeaders);
+app.use('/api/', apiRateLimiter);
+
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
@@ -36,8 +43,9 @@ app.get('/sitemap.xml', getSitemapXML);
 app.get('/robots.txt', getRobotsTXT);
 
 // Routes
-app.use('/api/auth', userAuthRoutes);
-app.use('/api/admin/auth', adminAuthRoutes);
+app.use('/api', healthRoutes);
+app.use('/api/auth', authRateLimiter, userAuthRoutes);
+app.use('/api/admin/auth', authRateLimiter, adminAuthRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/user', userAuthRoutes);
 app.use('/api/developer', developerRoutes);
@@ -48,6 +56,9 @@ app.use('/api/seo', seoRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
+
+// Centralized Global Error Handler
+app.use(globalErrorHandler);
 
 
 // Connect to MongoDB and start server
