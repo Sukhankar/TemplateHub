@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
+import ErrorBoundary from './user/components/ErrorBoundary.jsx';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { CartProvider } from "./user/context/CartContext";
@@ -12,14 +13,16 @@ AOS.init({ duration: 1000, once: true });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AuthProvider>
-      <AdminAuthProvider>
-        <CartProvider>
-          <WishlistProvider>
-            <App />
-          </WishlistProvider>
-        </CartProvider>
-      </AdminAuthProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <AdminAuthProvider>
+          <CartProvider>
+            <WishlistProvider>
+              <App />
+            </WishlistProvider>
+          </CartProvider>
+        </AdminAuthProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
