@@ -30,8 +30,13 @@ import EditTemplate from "./developer/pages/EditTemplate";
 import Analytics from "./developer/pages/Analytics";
 import Earnings from "./developer/pages/Earnings";
 
+// Admin Portal imports
 import AdminLogin from "./admin/pages/AdminLogin";
 import Dashboard from "./admin/pages/Dashboard";
+import UsersManagement from "./admin/pages/UsersManagement";
+import TemplateModeration from "./admin/pages/TemplateModeration";
+import DeveloperApprovals from "./admin/pages/DeveloperApprovals";
+import OrdersFinance from "./admin/pages/OrdersFinance";
 import AddTemplate from "./admin/pages/AddTemplate";
 import EditTemplateAdmin from "./admin/pages/EditTemplate";
 import TemplateDetailAdmin from "./admin/pages/TemplateDetail";
@@ -149,33 +154,65 @@ function App() {
         <Route
           path="/admin/dashboard"
           element={
-            <AdminProtectedRoute>
+            <UserProtectedRoute allowedRoles={["admin"]}>
               <Dashboard />
-            </AdminProtectedRoute>
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <UserProtectedRoute allowedRoles={["admin"]}>
+              <UsersManagement />
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/developers"
+          element={
+            <UserProtectedRoute allowedRoles={["admin"]}>
+              <DeveloperApprovals />
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/templates-moderation"
+          element={
+            <UserProtectedRoute allowedRoles={["admin"]}>
+              <TemplateModeration />
+            </UserProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/finance"
+          element={
+            <UserProtectedRoute allowedRoles={["admin"]}>
+              <OrdersFinance />
+            </UserProtectedRoute>
           }
         />
         <Route
           path="/admin/add"
           element={
-            <AdminProtectedRoute>
+            <UserProtectedRoute allowedRoles={["admin"]}>
               <AddTemplate />
-            </AdminProtectedRoute>
+            </UserProtectedRoute>
           }
         />
         <Route
           path="/admin/edit/:id"
           element={
-            <AdminProtectedRoute>
+            <UserProtectedRoute allowedRoles={["admin"]}>
               <EditTemplateAdmin />
-            </AdminProtectedRoute>
+            </UserProtectedRoute>
           }
         />
         <Route
           path="/admin/template/:id"
           element={
-            <AdminProtectedRoute>
+            <UserProtectedRoute allowedRoles={["admin"]}>
               <TemplateDetailAdmin />
-            </AdminProtectedRoute>
+            </UserProtectedRoute>
           }
         />
       </Routes>

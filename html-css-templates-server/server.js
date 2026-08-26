@@ -6,6 +6,7 @@ import path from 'path';
 import connectDB from './config/db.js';
 
 import adminAuthRoutes from './routes/AdminauthRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import userAuthRoutes from './routes/UserAuthRoutes.js';
 import developerRoutes from './routes/developerRoutes.js';
 import templateRoutes from './routes/templateRoutes.js';
@@ -29,7 +30,8 @@ app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/auth', userAuthRoutes);
-app.use('/api/admin', adminAuthRoutes);
+app.use('/api/admin/auth', adminAuthRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/user', userAuthRoutes);
 app.use('/api/developer', developerRoutes);
 app.use('/api/templates', templateRoutes);
