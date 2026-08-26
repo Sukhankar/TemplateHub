@@ -15,6 +15,8 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import seoRoutes from './routes/seoRoutes.js';
+import { getSitemapXML, getRobotsTXT } from './controllers/seoController.js';
 
 dotenv.config();
 
@@ -29,6 +31,10 @@ app.use(cookieParser());
 // Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
 
+// Public SEO Root Endpoints
+app.get('/sitemap.xml', getSitemapXML);
+app.get('/robots.txt', getRobotsTXT);
+
 // Routes
 app.use('/api/auth', userAuthRoutes);
 app.use('/api/admin/auth', adminAuthRoutes);
@@ -38,6 +44,7 @@ app.use('/api/developer', developerRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/seo', seoRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);

@@ -5,6 +5,7 @@ import TemplateCard from '../components/TemplateCard';
 import Footer from '../components/Footer';
 import API from '../userapi/userapi';
 import Loader from "../components/Loading";
+import SEO from "../components/SEO";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Contact from './Contact';
@@ -57,6 +58,10 @@ const Home = () => {
 
   return (
     <div className="bg-gradient-to-tr from-blue-50 via-purple-100 to-indigo-50">
+      <SEO
+        title="TemplateHub — Premier Website Templates & Code Digital Marketplace"
+        description="Discover, preview, and download hand-crafted HTML, CSS, React, and Tailwind website templates for developers and modern businesses."
+      />
       <Navbar scrollToAbout={scrollToAbout} scrollToContact={scrollToContact} />
       <HeroSection />
 
