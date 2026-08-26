@@ -9,6 +9,7 @@ import adminAuthRoutes from './routes/AdminauthRoutes.js';
 import userAuthRoutes from './routes/UserAuthRoutes.js';
 import developerRoutes from './routes/developerRoutes.js';
 import templateRoutes from './routes/templateRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
@@ -32,9 +33,11 @@ app.use('/api/admin', adminAuthRoutes);
 app.use('/api/user', userAuthRoutes);
 app.use('/api/developer', developerRoutes);
 app.use('/api/templates', templateRoutes);
+app.use('/api/payment', paymentRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/reviews', reviewRoutes);
+
 
 // Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;

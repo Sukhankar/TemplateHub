@@ -8,6 +8,8 @@ import LivePreview from "./user/pages/LivePreview";
 import Cart from "./user/pages/Cart";
 import Wishlist from "./user/pages/Wishlist";
 import Checkout from "./user/pages/Checkout";
+import PurchaseSuccess from "./user/pages/PurchaseSuccess";
+import MyPurchases from "./user/pages/MyPurchases";
 import About from "./user/pages/About";
 import Contact from "./user/pages/Contact";
 import Login from "./user/pages/Login";
@@ -67,6 +69,8 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/purchase-success" element={<PurchaseSuccess />} />
+        <Route path="/my-purchases" element={<MyPurchases />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
 
