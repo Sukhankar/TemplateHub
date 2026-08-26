@@ -10,6 +10,7 @@ import Wishlist from "./user/pages/Wishlist";
 import Checkout from "./user/pages/Checkout";
 import PurchaseSuccess from "./user/pages/PurchaseSuccess";
 import MyPurchases from "./user/pages/MyPurchases";
+import Notifications from "./user/pages/Notifications";
 import About from "./user/pages/About";
 import Contact from "./user/pages/Contact";
 import Login from "./user/pages/Login";
@@ -76,6 +77,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/purchase-success" element={<PurchaseSuccess />} />
         <Route path="/my-purchases" element={<MyPurchases />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
 

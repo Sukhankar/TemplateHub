@@ -1,6 +1,8 @@
 import Order from "../models/Order.js";
 import Template from "../models/Template.js";
 import Developer from "../models/DeveloperModel.js";
+import { createNotificationHelper } from "./notificationController.js";
+import { sendOrderConfirmationEmail, sendSaleNotificationEmail } from "../services/emailService.js";
 import path from "path";
 import fs from "fs";
 
@@ -56,7 +58,7 @@ export const createOrder = async (req, res) => {
       },
     });
 
-    // Update purchase counts and developer balances
+    // Update purchase counts and developer balances + send notifications
     for (const item of orderItems) {
       await Template.findByIdAndUpdate(item.template, {
         $inc: { purchaseCount: 1, downloadCount: 1 },
@@ -69,8 +71,29 @@ export const createOrder = async (req, res) => {
           { $inc: { totalEarnings: itemSellerEarnings, totalSales: 1 } },
           { upsert: true }
         );
+
+        // Notify Seller of Sale
+        await createNotificationHelper({
+          recipient: item.seller,
+          type: "template_sale",
+          title: "New Sale! 🎉",
+          message: `Your template "${item.title}" was purchased for $${item.price}. You earned $${itemSellerEarnings}.`,
+          link: "/developer/earnings",
+        });
       }
     }
+
+    // Notify Buyer of Purchase
+    await createNotificationHelper({
+      recipient: buyerId,
+      type: "order_placed",
+      title: "Order Confirmed! 🛒",
+      message: `Your purchase #${paymentId} for $${totalAmount} has been processed. Download files now!`,
+      link: "/my-purchases",
+    });
+
+    // Send Buyer Email
+    sendOrderConfirmationEmail(req.user.email, order).catch((e) => console.error(e));
 
     const populatedOrder = await Order.findById(order._id).populate("items.template");
 

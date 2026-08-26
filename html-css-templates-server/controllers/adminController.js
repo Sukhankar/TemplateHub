@@ -196,11 +196,25 @@ export const approveTemplate = async (req, res) => {
       req.params.id,
       { status: "approved", rejectionReason: "" },
       { new: true }
-    );
+    ).populate("sellerId", "email");
 
     if (!template) return res.status(404).json({ message: "Template not found" });
 
     await logAudit(req.user._id, "APPROVE_TEMPLATE", "Template", req.params.id, { title: template.title }, req.ip);
+
+    if (template.sellerId) {
+      await createNotificationHelper({
+        recipient: template.sellerId._id || template.sellerId,
+        type: "template_approved",
+        title: "Template Approved! ✅",
+        message: `Your template "${template.title}" has been approved and published to the marketplace!`,
+        link: "/developer/templates",
+      });
+
+      if (template.sellerId.email) {
+        sendTemplateStatusEmail(template.sellerId.email, template.title, "approved").catch((e) => console.error(e));
+      }
+    }
 
     res.status(200).json({ message: "Template approved and published to marketplace!", template });
   } catch (error) {
@@ -216,11 +230,25 @@ export const rejectTemplate = async (req, res) => {
       req.params.id,
       { status: "rejected", rejectionReason },
       { new: true }
-    );
+    ).populate("sellerId", "email");
 
     if (!template) return res.status(404).json({ message: "Template not found" });
 
     await logAudit(req.user._id, "REJECT_TEMPLATE", "Template", req.params.id, { rejectionReason }, req.ip);
+
+    if (template.sellerId) {
+      await createNotificationHelper({
+        recipient: template.sellerId._id || template.sellerId,
+        type: "template_rejected",
+        title: "Template Revision Required ⚠️",
+        message: `Your template "${template.title}" was not approved. Reason: ${rejectionReason}`,
+        link: "/developer/templates",
+      });
+
+      if (template.sellerId.email) {
+        sendTemplateStatusEmail(template.sellerId.email, template.title, "rejected", rejectionReason).catch((e) => console.error(e));
+      }
+    }
 
     res.status(200).json({ message: "Template rejected", template });
   } catch (error) {

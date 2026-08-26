@@ -6,6 +6,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { ShoppingCart, BookMarkedIcon, Menu, X} from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
 import Switch from "./Dark_light_button";
+import NotificationBell from "./NotificationBell";
 import DevCanvasLogo from "../../assets/DevCanvasLogo.png"; // Adjust the path/filename as needed
 
 const Navbar = ({ scrollToAbout, scrollToContact }) => {
@@ -193,6 +194,9 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
               </span>
             )}
           </div>
+
+          {/* Notifications Bell */}
+          <NotificationBell />
 
           {/* User Avatar Dropdown */}
           {user ? (
