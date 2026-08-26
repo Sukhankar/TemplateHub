@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { FaGoogle, FaFacebook, FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import API from "../userapi/userapi";
+import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaStore } from "react-icons/fa";
 
 const Register = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "user",
+    storeName: "",
+    storeDescription: "",
+  });
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const passwordValidations = {
@@ -25,194 +31,271 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.password) return;
+    setError("");
+
+    if (!form.name || !form.email || !form.password) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
+    if (form.role === "developer" && !form.storeName) {
+      setError("Store name is required for seller accounts.");
+      return;
+    }
+
+    setSubmitting(true);
 
     try {
-      const response = await API.post("/user/signup", form);
-      
-      if (response.data) {
-        login(response.data);
-        navigate("/");
-      }
+      await register({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+        storeName: form.role === "developer" ? form.storeName : undefined,
+        storeDescription: form.role === "developer" ? form.storeDescription : undefined,
+      });
+
+      navigate(`/verify-email?email=${encodeURIComponent(form.email)}`);
     } catch (err) {
-      setError("Registration failed. Please try again.");
-      console.error("Registration error:", err);
+      const errMsg =
+        err.response?.data?.message ||
+        err.response?.data?.errors?.join(", ") ||
+        "Registration failed. Please try again.";
+      setError(errMsg);
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google login");
-    // Implement Google OAuth integration
-  };
-
-  const handleFacebookLogin = () => {
-    console.log("Facebook login");
-    // Implement Facebook OAuth integration
-  };
-
   return (
-    <>
-      <div className="flex min-h-screen items-center justify-center bg-blue-100 p-4">
-        <div className="flex w-full max-w-6xl rounded-xl bg-white shadow-lg overflow-hidden">
-          {/* Right Form */}
-          <div className="w-1/2 p-10">
-            <h2 className="text-3xl font-bold mb-2">Sign Up</h2>
-            <p className="text-gray-500 mb-6">Create your account to get started</p>
+    <div className="flex min-h-screen items-center justify-center bg-blue-50 p-4">
+      <div className="flex w-full max-w-5xl rounded-2xl bg-white shadow-2xl overflow-hidden my-6">
+        {/* Left Form */}
+        <div className="w-full md:w-1/2 p-8 md:p-10">
+          <h2 className="text-3xl font-bold text-gray-900 mb-1">Create Account</h2>
+          <p className="text-gray-500 mb-6">Join TemplateHub as a Buyer or Seller</p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex items-center border rounded px-3 py-2">
-                <FaUser className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter your name"
-                  className="w-full outline-none"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="flex items-center border rounded px-3 py-2">
-                <FaEnvelope className="text-gray-400 mr-2" />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  className="w-full outline-none"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              {/* Password Input */}
-              <div className="relative border rounded px-3 py-2 flex items-center">
-                <FaLock className="text-gray-400 mr-2" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  placeholder="Password"
-                  className="w-full outline-none"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                />
-                <div
-                  className="cursor-pointer text-gray-400"
-                  onClick={() => setShowPassword(!showPassword)}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Role Selection */}
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Account Type</label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, role: "user" })}
+                  className={`flex items-center justify-center gap-2 p-3 rounded-lg border font-medium text-sm transition-all ${
+                    form.role === "user"
+                      ? "border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm"
+                      : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                  }`}
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  <FaUser /> Buyer
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, role: "developer" })}
+                  className={`flex items-center justify-center gap-2 p-3 rounded-lg border font-medium text-sm transition-all ${
+                    form.role === "developer"
+                      ? "border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm"
+                      : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  <FaStore /> Seller / Developer
+                </button>
+              </div>
+            </div>
+
+            {/* Name */}
+            <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-indigo-500">
+              <FaUser className="text-gray-400 mr-2" />
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                className="w-full outline-none text-sm text-gray-800"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Email */}
+            <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-indigo-500">
+              <FaEnvelope className="text-gray-400 mr-2" />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                className="w-full outline-none text-sm text-gray-800"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Developer Specific Fields */}
+            {form.role === "developer" && (
+              <div className="space-y-3 p-4 bg-gray-50 rounded-xl border border-gray-200 animate-fadeIn">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+                  Developer Store Details
+                </h4>
+                <div className="flex items-center border rounded-lg px-3 py-2 bg-white focus-within:ring-2 focus-within:ring-indigo-500">
+                  <FaStore className="text-gray-400 mr-2" />
+                  <input
+                    type="text"
+                    name="storeName"
+                    placeholder="Store / Brand Name (e.g. PixelCraft)"
+                    className="w-full outline-none text-sm text-gray-800"
+                    value={form.storeName}
+                    onChange={handleChange}
+                    required={form.role === "developer"}
+                  />
                 </div>
-              </div>
-
-              {/* Password Checklist */}
-              <ul className="text-sm mt-2 space-y-1">
-                <li className={`flex items-center gap-2 ${passwordValidations.length ? 'text-green-600' : 'text-gray-500'}`}>
-                  {passwordValidations.length ? '✔️' : '✖️'} At least 8 characters
-                </li>
-                <li className={`flex items-center gap极2 ${passwordValidations.number ? 'text-green-600' : 'text-gray-500'}`}>
-                  {passwordValidations.number ? '✔️' : '✖️'} At least one number (0–9) or symbol
-                </li>
-                <li className={`flex items-center gap-2 ${passwordValidations.case ? 'text-green-600' : 'text-gray-500'}`}>
-                  {passwordValidations.case ? '✔️' : '✖️'} Lowercase (a-z) and Uppercase (A-Z)
-                </li>
-              </ul>
-
-              {/* Confirm Password Input */}
-              <div className="border rounded px-3 py-2 flex flex-col">
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  className={`w-full outline-none ${form.confirmPassword && form.confirmPassword !== form.password ? 'border-red-500' : ''}`}
-                  value={form.confirmPassword}
+                <textarea
+                  name="storeDescription"
+                  placeholder="Short Store Bio / Description"
+                  rows={2}
+                  className="w-full border rounded-lg p-2.5 text-sm outline-none bg-white focus:ring-2 focus:ring-indigo-500"
+                  value={form.storeDescription}
                   onChange={handleChange}
-                  required
                 />
-                {form.confirmPassword && form.confirmPassword !== form.password && (
-                  <span className="text-sm text-red-500 mt-1">Passwords do not match</span>
-                )}
               </div>
+            )}
 
-              {error && <div className="text-sm text-red-500 mb-2">{error}</div>}
+            {/* Password Input */}
+            <div className="relative border rounded-lg px-3 py-2 flex items-center focus-within:ring-2 focus-within:ring-indigo-500">
+              <FaLock className="text-gray-400 mr-2" />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                className="w-full outline-none text-sm text-gray-800"
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
+              <div
+                className="cursor-pointer text-gray-400 hover:text-gray-600"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                disabled={
-                  !passwordValidations.length ||
-                  !passwordValidations.number ||
-                  !passwordValidations.case ||
-                  form.password !== form.confirmPassword
-                }
-                className={`w-full py-2 rounded-md transition-all ${
-                  !passwordValidations.length || !passwordValidations.number || !passwordValidations.case || form.password !== form.confirmPassword
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+            {/* Password Strength Checklist */}
+            <ul className="text-xs space-y-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
+              <li
+                className={`flex items-center gap-2 ${
+                  passwordValidations.length ? "text-emerald-600 font-medium" : "text-gray-500"
                 }`}
               >
-                Register
-              </button>
+                {passwordValidations.length ? "✓" : "○"} At least 8 characters
+              </li>
+              <li
+                className={`flex items-center gap-2 ${
+                  passwordValidations.number ? "text-emerald-600 font-medium" : "text-gray-500"
+                }`}
+              >
+                {passwordValidations.number ? "✓" : "○"} At least one number (0–9)
+              </li>
+              <li
+                className={`flex items-center gap-2 ${
+                  passwordValidations.case ? "text-emerald-600 font-medium" : "text-gray-500"
+                }`}
+              >
+                {passwordValidations.case ? "✓" : "○"} Both lowercase and uppercase letters
+              </li>
+            </ul>
 
-              <div className="flex justify-center items-center gap-3 mt-3">
-                <span className="text-sm text-gray-500">Or sign up with:</span>
-                <div className="flex space-x-3">
-                  <button
-                    onClick={handleGoogleLogin}
-                    className="p-2 rounded-full hover:bg-gray-100 transition"
-                  >
-                    <FaGoogle className="text-red-500" />
-                  </button>
-                  <button
-                    onClick={handleFacebookLogin}
-                    className="p-2 rounded-full hover:bg-gray-100 transition"
-                  >
-                    <FaFacebook className="text-blue-600" />
-                  </button>
-                </div>
+            {/* Confirm Password Input */}
+            <div className="border rounded-lg px-3 py-2 flex flex-col focus-within:ring-2 focus-within:ring-indigo-500">
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                className={`w-full outline-none text-sm text-gray-800 ${
+                  form.confirmPassword && form.confirmPassword !== form.password
+                    ? "border-red-500"
+                    : ""
+                }`}
+                value={form.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              {form.confirmPassword && form.confirmPassword !== form.password && (
+                <span className="text-xs text-red-500 mt-1">Passwords do not match</span>
+              )}
+            </div>
+
+            {error && (
+              <div className="p-3 text-xs bg-red-50 text-red-600 rounded-lg border border-red-200">
+                {error}
               </div>
+            )}
 
-              <p className="text-sm mt-5 text-center text-gray-600">
-                Already have an account?{" "}
-                <a href="/login" className="text-blue-600 hover:underline">
-                  Login
-                </a>
-              </p>
-            </form>
+            <button
+              type="submit"
+              disabled={
+                submitting ||
+                !passwordValidations.length ||
+                !passwordValidations.number ||
+                !passwordValidations.case ||
+                form.password !== form.confirmPassword
+              }
+              className={`w-full py-2.5 rounded-lg text-sm font-semibold transition-all shadow-md ${
+                submitting ||
+                !passwordValidations.length ||
+                !passwordValidations.number ||
+                !passwordValidations.case ||
+                form.password !== form.confirmPassword
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
+              }`}
+            >
+              {submitting ? "Registering..." : "Create Account"}
+            </button>
+
+            <p className="text-xs text-center text-gray-600 pt-2">
+              Already have an account?{" "}
+              <Link to="/login" className="text-indigo-600 font-semibold hover:underline">
+                Sign In
+              </Link>
+            </p>
+          </form>
+        </div>
+
+        {/* Right Visual Panel */}
+        <div className="hidden md:flex w-1/2 bg-gradient-to-br from-indigo-700 via-indigo-600 to-purple-700 p-10 text-white flex-col justify-between relative">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-200">
+              Welcome to TemplateHub
+            </span>
+            <h3 className="text-3xl font-extrabold mt-2 leading-snug">
+              Build & Monetize Premium Templates
+            </h3>
+            <p className="text-indigo-100 text-sm mt-3">
+              Join thousands of developers selling HTML, CSS, and React website templates directly to creators worldwide.
+            </p>
           </div>
 
-          {/* Left Visual Panel */}
-          <div className="w-1/2 bg-gradient-to-br from-blue-700 to-blue-400 p-8 text-white flex flex-col justify-between relative overflow-hidden">
-            {/* Inbox Card */}
-            <div className="bg-white text-gray-900 p-6 rounded-xl shadow-xl w-[220px]">
-              <h4 className="text-orange-500 text-sm font-semibold mb-2">Inbox</h4>
-              <div className="text-2xl font-bold mb-4">176,18</div>
-              <div className="w-10 h-10 rounded-full bg-indigo-950 text-white flex items-center justify-center font-semibold mb-2">45</div>
-              <div className="h-1 rounded-full bg-orange-500 w-full"></div>
+          <div className="space-y-4">
+            <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/15 shadow-lg">
+              <h4 className="font-semibold text-sm text-white">🔒 Enterprise Security</h4>
+              <p className="text-xs text-indigo-100 mt-1">
+                Multi-layer authorization, OTP verification, and JWT session encryption protect your account.
+              </p>
             </div>
-
-            {/* Social Icons */}
-            <div className="flex gap-4 ml-3">
-              <div className="bg-white/20 p-3 rounded-full cursor-pointer hover:bg-white/30">
-                <i className="fab fa-instagram text-white text-xl"></i>
-              </div>
-              <div className="bg-white/20 p-3 rounded-full cursor-pointer hover:bg-white/30">
-                <i className="fab fa-tiktok text-white text-xl"></i>
-              </div>
-            </div>
-
-            {/* Info Card */}
-            <div className="bg-white text-gray-900 p-5 rounded-xl shadow-xl w-[280px]">
-              <div className="flex items-center gap-2 mb-2">
-                <i className="fas fa-key text-yellow-500"></i>
-                <h4 className="font-bold text-sm">Your data, your rules</h4>
-              </div>
-              <p className="text-xs text-gray-600">Your data belongs to you, and our encryption ensures that</p>
+            <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/15 shadow-lg">
+              <h4 className="font-semibold text-sm text-white">🚀 Instant Store Activation</h4>
+              <p className="text-xs text-indigo-100 mt-1">
+                Publish your products to our curated marketplace after quick admin review.
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

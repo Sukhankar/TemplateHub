@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import API from '../userapi/userapi';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -15,123 +15,128 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return;
-    
+
+    setError("");
+    setSubmitting(true);
+
     try {
-      const response = await API.post('/user/login', {
-        email,
-        password
-      });
-      
-      if (response.data) {
-        login(response.data.user);
-        navigate('/');
+      const data = await login(email, password);
+
+      const role = data.user?.role;
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (role === "developer") {
+        navigate("/developer/dashboard");
+      } else {
+        navigate("/");
       }
     } catch (err) {
-      setError('Invalid credentials. Please try again.');
-      console.error('Login error:', err);
+      if (err.response?.data?.requiresVerification) {
+        navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        return;
+      }
+      setError(err.response?.data?.message || "Invalid credentials. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-blue-100 p-4">
-      <div className="flex w-full max-w-6xl rounded-xl bg-white shadow-lg overflow-hidden">
+    <div className="flex min-h-screen items-center justify-center bg-blue-50 p-4">
+      <div className="flex w-full max-w-4xl rounded-2xl bg-white shadow-2xl overflow-hidden my-6">
         {/* Left Visual Panel */}
-        <div className="w-1/2 bg-gradient-to-br from-blue-700 to-blue-400 p-8 text-white flex flex-col justify-between relative overflow-hidden">
-          {/* Inbox Card */}
-          <div className="bg-white text-gray-900 p-6 rounded-xl shadow-xl w-[220px]">
-            <h4 className="text-orange-500 text-sm font-semibold mb-2">Inbox</h4>
-            <div className="text-2xl font-bold mb-4">176,18</div>
-            <div className="w-10 h-10 rounded-full bg-indigo-950 text-white flex items-center justify-center font-semibold mb-2">45</div>
-            <div className="h-1 rounded-full bg-orange-500 w-full"></div>
+        <div className="hidden md:flex w-1/2 bg-gradient-to-br from-indigo-700 via-indigo-600 to-purple-700 p-10 text-white flex-col justify-between relative">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-200">
+              TemplateHub Portal
+            </span>
+            <h3 className="text-3xl font-extrabold mt-2 leading-snug">
+              Welcome Back to Your Workspace
+            </h3>
+            <p className="text-indigo-100 text-sm mt-3">
+              Access your purchased website templates, downloads, sales analytics, and developer dashboard.
+            </p>
           </div>
 
-          {/* Social Icons */}
-          <div className="flex gap-4 ml-3">
-            <div className="bg-white/20 p-3 rounded-full cursor-pointer hover:bg-white/30">
-              <i className="fab fa-instagram text-white text-xl"></i>
-            </div>
-            <div className="bg-white/20 p-3 rounded-full cursor-pointer hover:bg-white/30">
-              <i className="fab fa-tiktok text-white text-xl"></i>
-            </div>
-          </div>
-
-          {/* Info Card */}
-          <div className="bg-white text-gray-900 p-5 rounded-xl shadow-xl w-[280px]">
-            <div className="flex items-center gap-2 mb-2">
-              <i className="fas fa-key text-yellow-500"></i>
-              <h4 className="font-bold text-sm">Your data, your rules</h4>
-            </div>
-            <p className="text-xs text-gray-600">Your data belongs to you, and our encryption ensures that</p>
+          <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/15 shadow-lg">
+            <h4 className="font-semibold text-sm text-white">🔒 Enhanced Session Security</h4>
+            <p className="text-xs text-indigo-100 mt-1">
+              Short-lived access tokens and httpOnly encrypted refresh cookies protect your transactions.
+            </p>
           </div>
         </div>
 
         {/* Right Form */}
-        <div className="w-1/2 p-10">
-          <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
-          <p className="text-gray-500 mb-6">Secure Your Account with Us</p>
+        <div className="w-full md:w-1/2 p-8 md:p-10">
+          <h2 className="text-3xl font-bold text-gray-900 mb-1">Sign In</h2>
+          <p className="text-gray-500 mb-6">Enter your credentials to access your account</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex items-center border rounded px-3 py-2">
+            <div className="flex items-center border rounded-lg px-3 py-2.5 focus-within:ring-2 focus-within:ring-indigo-500">
               <FaEnvelope className="text-gray-400 mr-2" />
               <input
                 type="email"
-                placeholder="Enter your email"
-                className="w-full outline-none"
+                placeholder="Email Address"
+                className="w-full outline-none text-sm text-gray-800"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
 
-            <div className="relative border rounded px-3 py-2 flex items-center">
+            <div className="relative border rounded-lg px-3 py-2.5 flex items-center focus-within:ring-2 focus-within:ring-indigo-500">
               <FaLock className="text-gray-400 mr-2" />
               <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Enter your password"
-                className="w-full outline-none"
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full outline-none text-sm text-gray-800"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
               <div
-                className="cursor-pointer text-gray-400"
+                className="cursor-pointer text-gray-400 hover:text-gray-600"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </div>
             </div>
 
-            {error && <div className="text-sm text-red-500 mb-2">{error}</div>}
+            <div className="flex items-center justify-between text-xs">
+              <label className="flex items-center gap-2 text-gray-600 cursor-pointer">
+                <input type="checkbox" className="rounded border-gray-300 text-indigo-600" />
+                Remember me
+              </label>
+
+              <Link to="/forgot-password" className="text-indigo-600 font-semibold hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+
+            {error && (
+              <div className="p-3 text-xs bg-red-50 text-red-600 rounded-lg border border-red-200">
+                {error}
+              </div>
+            )}
 
             <button
               type="submit"
-              className="w-full bg-indigo-500 text-white py-2 rounded hover:bg-indigo-600 transition"
+              disabled={submitting}
+              className={`w-full py-2.5 rounded-lg text-sm font-semibold transition-all shadow-md ${
+                submitting
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed shadow-none"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
+              }`}
             >
-              Login
+              {submitting ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
-          <div className="flex justify-center items-center gap-3 mt-3">
-            <span className="text-sm text-gray-500">Or login with:</span>
-            <div className="flex space-x-3">
-              <img 
-                src="https://www.svgrepo.com/show/355037/facebook.svg" 
-                alt="facebook" 
-                className="h-6 w-6 cursor-pointer"
-              />
-              <img 
-                src="https://www.svgrepo.com/show/355037/google.svg" 
-                alt="google" 
-                className="h-6 w-6 cursor-pointer"
-              />
-            </div>
-          </div>
-
-          <p className="text-sm mt-5 text-center text-gray-600">
-            Don't have an account?{' '}
-            <a href="/register" className="text-blue-600 hover:underline">
-              Register
-            </a>
+          <p className="text-xs mt-6 text-center text-gray-600">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-indigo-600 font-semibold hover:underline">
+              Create an account
+            </Link>
           </p>
         </div>
       </div>
