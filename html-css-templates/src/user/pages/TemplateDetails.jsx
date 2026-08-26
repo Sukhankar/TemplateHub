@@ -6,6 +6,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
+import SEO from "../components/SEO";
 import {
   FaStar,
   FaShoppingCart,
@@ -17,6 +18,11 @@ import {
   FaShieldAlt,
   FaCode,
   FaStore,
+  FaTwitter,
+  FaLinkedin,
+  FaFacebook,
+  FaWhatsapp,
+  FaLink,
 } from "react-icons/fa";
 
 const TemplateDetails = () => {
@@ -140,10 +146,55 @@ const TemplateDetails = () => {
   }
 
   const computedPrice = getLicensePrice();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const shareUrl = encodeURIComponent(window.location.href);
+  const shareText = encodeURIComponent(`Check out "${template.title}" on TemplateHub!`);
+
+  // Structured Data Schema for Google Rich Snippets
+  const jsonLdSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: template.title,
+    image: template.previewImages || [template.image],
+    description: template.description,
+    sku: template._id,
+    category: template.category,
+    offers: {
+      "@type": "Offer",
+      url: window.location.href,
+      priceCurrency: "USD",
+      price: template.isFree ? "0.00" : computedPrice,
+      itemCondition: "https://schema.org/NewCondition",
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: template.averageRating || 5.0,
+      reviewCount: template.totalReviews || 1,
+    },
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
       <Navbar />
+
+      <SEO
+        title={template.title}
+        description={template.description}
+        image={template.previewImages?.[0]}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
+      />
 
       {/* Header Breadcrumb */}
       <section className="pt-24 pb-6 bg-slate-900 text-white border-b border-slate-800">
@@ -159,7 +210,7 @@ const TemplateDetails = () => {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-2">
             <div>
               <h1 className="text-2xl sm:text-3xl font-black text-white">{template.title}</h1>
-              <div className="flex items-center gap-4 text-xs text-slate-300 mt-1">
+              <div className="flex flex-wrap items-center gap-4 text-xs text-slate-300 mt-1">
                 <span className="flex items-center gap-1 text-indigo-400 font-semibold">
                   <FaStore /> {developerStore?.storeName || template.sellerId?.name || "Verified Developer"}
                 </span>
@@ -169,6 +220,59 @@ const TemplateDetails = () => {
                 </span>
                 <span>•</span>
                 <span>{template.downloadCount || 0} Downloads</span>
+              </div>
+
+              {/* Social Share Bar */}
+              <div className="flex items-center gap-2 mt-3 pt-2 border-t border-slate-800">
+                <span className="text-[11px] font-bold text-slate-400">Share:</span>
+                <button
+                  onClick={handleCopyLink}
+                  className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs transition relative"
+                  title="Copy link"
+                >
+                  <FaLink />
+                  {copied && (
+                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow">
+                      Copied!
+                    </span>
+                  )}
+                </button>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-1.5 bg-slate-800 hover:bg-sky-600 text-slate-200 rounded-lg text-xs transition"
+                  title="Share on Twitter"
+                >
+                  <FaTwitter />
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-1.5 bg-slate-800 hover:bg-blue-700 text-slate-200 rounded-lg text-xs transition"
+                  title="Share on LinkedIn"
+                >
+                  <FaLinkedin />
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-1.5 bg-slate-800 hover:bg-blue-600 text-slate-200 rounded-lg text-xs transition"
+                  title="Share on Facebook"
+                >
+                  <FaFacebook />
+                </a>
+                <a
+                  href={`https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-1.5 bg-slate-800 hover:bg-emerald-600 text-slate-200 rounded-lg text-xs transition"
+                  title="Share on WhatsApp"
+                >
+                  <FaWhatsapp />
+                </a>
               </div>
             </div>
 
