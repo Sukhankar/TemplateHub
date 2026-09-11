@@ -2,25 +2,63 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Switch = () => {
-  const [isDarkMode, setIsDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme ? savedTheme === "dark" : false;
+  });
 
+  // Apply theme based on isDarkMode state
   useEffect(() => {
-    // Apply the theme based on the toggle state
+    const htmlElement = document.documentElement;
+
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      htmlElement.classList.add("dark-mode");
       localStorage.setItem("theme", "dark");
+      // Add global dark mode styles
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .dark-mode {
+          filter: invert(1) hue-rotate(180deg);
+        }
+        .dark-mode img {
+          filter: invert(1) hue-rotate(180deg);
+        }
+      `;
+      document.head.appendChild(style);
     } else {
-      document.documentElement.classList.remove("dark");
+      htmlElement.classList.remove("dark-mode");
       localStorage.setItem("theme", "light");
+      // Remove global dark mode styles
+      const style = document.querySelector('style[data-dark-mode]');
+      if (style) {
+        style.remove();
+      }
     }
   }, [isDarkMode]);
 
-  const handleToggle = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-  };
+  // On initial load
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const htmlElement = document.documentElement;
+    if (savedTheme === "dark") {
+      htmlElement.classList.add("dark-mode");
+      // Add global dark mode styles
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .dark-mode {
+          filter: invert(1) hue-rotate(180deg);
+        }
+        .dark-mode img {
+          filter: invert(1) hue-rotate(180deg);
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
 
+  const handleToggle = () => {
+    setIsDarkMode(prev => !prev);
+  };
   return (
     <StyledWrapper>
       <label className="switch">

@@ -5,7 +5,8 @@ import {
   getTemplate,
   addTemplate,
   updateTemplate,
-  deleteTemplate
+  deleteTemplate,
+  likeTemplate
 } from '../controllers/templateController.js';
 
 import { authenticateAdmin } from '../middleware/AdminAuthMiddleware.js';
@@ -18,5 +19,6 @@ router.get('/:id', getTemplate);
 router.post('/', authenticateAdmin, addTemplate);
 router.put('/:id', authenticateAdmin, updateTemplate);
 router.delete('/:id', authenticateAdmin, deleteTemplate);
+router.patch('/:id/like', likeTemplate);
 
 export default router;

@@ -1,24 +1,56 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { ShoppingCart, BookMarkedIcon, Menu, X} from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
 import Switch from "./Dark_light_button";
+import NotificationBell from "./NotificationBell";
+import DevCanvasLogo from "../../assets/DevCanvasLogo.png"; // Adjust the path/filename as needed
 
 const Navbar = ({ scrollToAbout, scrollToContact }) => {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
   const { wishlist } = useWishlist();
   const navigate = useNavigate();
+  const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [hoveredElement, setHoveredElement] = useState(null);
+
+  // Auto logout after 2 hours
+  useEffect(() => {
+    const autoLogoutTimer = setTimeout(() => {
+      if (user) {
+        logout();
+        navigate("/login");
+      }
+    }, 2 * 60 * 60 * 1000); // 2 hours in milliseconds
+
+    return () => clearTimeout(autoLogoutTimer);
+  }, [user, logout, navigate]);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleAboutClick = () => {
+    if (location.pathname === "/") {
+      scrollToAbout();
+    } else {
+      navigate("/#about");
+    }
+  };
+
+  const handleContactClick = () => {
+    if (location.pathname === "/") {
+      scrollToContact();
+    } else {
+      navigate("/#contact");
+    }
   };
 
   // Close dropdown on outside click
@@ -32,59 +64,123 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleMouseEnter = (element) => {
+    setHoveredElement(element);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredElement(null);
+  };
+
+  const getTooltip = (element) => {
+    const tooltips = {
+      templates: "Browse templates",
+      about: "Learn about us",
+      contact: "Get in touch",
+      wishlist: "View your bookmarks",
+      cart: "View your cart",
+      user: "Manage your account",
+      login: "Login to your account",
+      signup: "Create a new account"
+    };
+    return tooltips[element];
+  };
+
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 dark:bg-gray-800">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-blue-600 dark:text-gray-200">TemplateHub</Link>
+    <nav className="bg-black/25 backdrop-blur-sm shadow-md fixed top-0 left-0 right-0 z-50">
+  <div className="container mx-auto px-4 py-1 flex justify-between items-center">
+    <Link to="/" className="flex items-center space-x-2 group">
+      <img
+        src={DevCanvasLogo}
+        alt="DevCanvas Logo"
+        className="h-24 w-24 -my-6 object-contain transition-transform duration-300 group-hover:scale-105"
+        style={{ borderRadius: "0.5rem", background: "transparent" }}
+      />
+      {/* <span className="text-2xl font-bold text-blue-600 tracking-tight">DevCanvas</span> */}
+    </Link>
+
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <div className="relative group">
-            <Link to="/templates" className="text-gray-700 hover:text-blue-600 dark:text-gray-200">
+          <div 
+            className="relative group"
+            onMouseEnter={() => handleMouseEnter('templates')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Link to="/templates" className="text-white hover:text-blue-600">
               Templates
             </Link>
-            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-              Browse templates
-            </span>
+            {hoveredElement === 'templates' && (
+              <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                {getTooltip('templates')}
+              </span>
+            )}
           </div>
 
-          <div className="relative group">
+          <div 
+            className="relative group"
+            onMouseEnter={() => handleMouseEnter('about')}
+            onMouseLeave={handleMouseLeave}
+          >
             <button
-              onClick={scrollToAbout}
-              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+              onClick={handleAboutClick}
+              className="text-white hover:text-blue-600"
             >
               About
             </button>
-            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-              Learn about us
-            </span>
+            {hoveredElement === 'about' && (
+              <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                {getTooltip('about')}
+              </span>
+            )}
           </div>
 
-          <div className="relative group">
+          <div 
+            className="relative group"
+            onMouseEnter={() => handleMouseEnter('contact')}
+            onMouseLeave={handleMouseLeave}
+          >
             <button
-              onClick={scrollToContact}
-              className="text-gray-700 hover:text-blue-600 dark:text-gray-200"
+              onClick={handleContactClick}
+              className="text-white hover:text-blue-600"
             >
               Contact
             </button>
-            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-              Get in touch
-            </span>
+            {hoveredElement === 'contact' && (
+              <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                {getTooltip('contact')}
+              </span>
+            )}
           </div>
 
           {/* Wishlist */}
-          <div className="relative group">
-            <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600 dark:text-gray-200">
+          <div 
+            className="relative group"
+            onMouseEnter={() => handleMouseEnter('wishlist')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Link to="/wishlist" className="relative text-white hover:text-red-600">
               <BookMarkedIcon className="w-5 h-5" />
+              {wishlist.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
+                  {wishlist.length}
+                </span>
+              )}
             </Link>
-            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-              View your bookmarks
-            </span>
+            {hoveredElement === 'wishlist' && (
+              <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                {getTooltip('wishlist')}
+              </span>
+            )}
           </div>
 
           {/* Cart */}
-          <div className="relative group">
-            <Link to="/cart" className="relative text-gray-700 hover:text-blue-600 dark:text-gray-200">
+          <div 
+            className="relative group"
+            onMouseEnter={() => handleMouseEnter('cart')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Link to="/cart" className="relative text-white hover:text-blue-600">
               <ShoppingCart className="w-5 h-5" />
               {cartItems.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
@@ -92,14 +188,23 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
                 </span>
               )}
             </Link>
-            <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-              View your cart
-            </span>
+            {hoveredElement === 'cart' && (
+              <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                {getTooltip('cart')}
+              </span>
+            )}
           </div>
+
+          {/* Notifications Bell */}
+          <NotificationBell />
 
           {/* User Avatar Dropdown */}
           {user ? (
-            <div className="relative group">
+            <div 
+              className="relative group"
+              onMouseEnter={() => handleMouseEnter('user')}
+              onMouseLeave={handleMouseLeave}
+            >
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -110,13 +215,13 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
                   </div>
                 </button>
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border rounded shadow p-3 w-48 z-50 dark:bg-gray-800">
-                    <div className="text-xs text-gray-500 mb-2 truncate dark:text-gray-200">
+                  <div className="absolute right-0 mt-2 bg-white border rounded shadow p-3 w-48 z-50">
+                    <div className="text-xs text-gray-500 mb-2 truncate">
                       {user?.email || "No email"}
                     </div>
                     <Link
                       to="/profile"
-                      className="block text-gray-700 hover:text-blue-600 text-sm mb-2 dark:text-gray-200"
+                      className="block text-gray-700 hover:text-blue-600 text-sm mb-2"
                       onClick={() => setDropdownOpen(false)}
                     >
                       Profile
@@ -130,49 +235,60 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
                   </div>
                 )}
               </div>
-              <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-                Manage your account
-              </span>
+              {hoveredElement === 'user' && (
+                <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                  {getTooltip('user')}
+                </span>
+              )}
             </div>
           ) : (
             <>
-              <div className="relative group">
-                <Link to="/login" className="text-blue-600 text-sm dark:text-gray-200">
+              <div 
+                className="relative group"
+                onMouseEnter={() => handleMouseEnter('login')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <Link to="/login" className="text-white text-sm">
                   Login
                 </Link>
-                <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-                  Login to your account
-                </span>
+                {hoveredElement === 'login' && (
+                  <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                    {getTooltip('login')}
+                  </span>
+                )}
               </div>
-              <div className="relative group">
+              <div 
+                className="relative group"
+                onMouseEnter={() => handleMouseEnter('signup')}
+                onMouseLeave={handleMouseLeave}
+              >
                 <Link to="/register" className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 text-sm">
                   Signup
                 </Link>
-                <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-                  Create a new account
-                </span>
+                {hoveredElement === 'signup' && (
+                  <span className="absolute top-full mt-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded px-2 py-1">
+                    {getTooltip('signup')}
+                  </span>
+                )}
               </div>
             </>
           )}
           {/* Add the Switch component */}
-          <div className="relative group">
+          <div className="relative">
             <Switch />
-            <span className="absolute left-1/2 transform -translate-x-1/2 -translate-y-8 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-gray-800 text-white text-xs rounded px-2 py-1">
-              Toggle dark/light mode
-            </span>
           </div>
         </div>
 
         {/* Mobile Navigation */}
         <div className="md:hidden flex items-center space-x-1">
           {/* Add the Switch component */}
-          <div className="scale-50"> {/* Scale down the Switch for mobile */}
+          <div className="scale-50">
             <Switch />
           </div>
 
           {/* Wishlist */}
-          <Link to="/wishlist" className="relative text-gray-400 hover:text-red-600 dark:text-gray-100">
-          <BookMarkedIcon className="w-4 h-4" /> {/* Smaller icon for mobile */}
+          <Link to="/wishlist" className="relative text-gray-700 hover:text-red-600">
+          <BookMarkedIcon className="w-4 h-4" />
             {wishlist.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">
                 {wishlist.length}
@@ -181,8 +297,8 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
           </Link>
 
           {/* Cart */}
-          <Link to="/cart" className="relative text-gray-700 hover:text-blue-600 dark:text-gray-200">
-            <ShoppingCart className="w-4 h-4" /> {/* Smaller icon for mobile */}
+          <Link to="/cart" className="relative text-gray=700 hover:text-blue-600">
+            <ShoppingCart className="w-4 h-4" />
             {cartItems.length > 0 && (
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs px-1.5 rounded-full">
                 {cartItems.length}
@@ -192,10 +308,10 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="p-1 text-gray-700 dark:text-gray-200" 
+            className="p-1 text-gray-700" 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />} {/* Smaller icons */}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
@@ -221,7 +337,6 @@ const Navbar = ({ scrollToAbout, scrollToContact }) => {
                 <Link to="/register" className="block text-blue-600 dark:text-gray-200" onClick={() => setMobileMenuOpen(false)}>Signup</Link>
               </>
             )}
-            
           </div>
         )}
       </div>

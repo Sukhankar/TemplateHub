@@ -1,12 +1,15 @@
 const TemplateActions = ({
-  user,
   template,
   handleAddToCart,
   handleBuyNow
 }) => {
   const handleDownload = () => {
+    const driveBaseUrl = "https://drive.google.com/uc?export=download&id=";
+    const fileId = template.zipfile; // Assuming zipfile contains the Google Drive file ID
+    const downloadUrl = `${driveBaseUrl}${fileId}`;
+    
     const link = document.createElement("a");
-    link.href = template.zipfile;
+    link.href = downloadUrl;
     link.setAttribute("download", "");
     document.body.appendChild(link);
     link.click();

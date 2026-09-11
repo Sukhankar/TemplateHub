@@ -10,11 +10,11 @@ const Wishlist = () => {
   return (
     <>
       <Navbar />
-      <section className="pt-32 px-8 min-h-screen bg-gray-50">
+      <section className="pt-32 px-8 min-h-screen bg-white">
         <div className="container mx-auto">
-          <h1 className="text-3xl font-bold mb-8">❤️ Your Wishlist</h1>
+          <h1 className="text-3xl font-bold mb-8 text-gray-900">❤️ Your Bookmarks</h1>
           {wishlist.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No templates saved yet.</p>
+            <p className="text-gray-600 text-center py-8">No templates saved yet.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
               {wishlist.map((template) => (
