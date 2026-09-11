@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
-import Navbar from '../components/Navbar';
-import HeroSection from '../components/HeroSection';
-import TemplateCard from '../components/TemplateCard';
-import Footer from '../components/Footer';
-import API from '../userapi/userapi';
+import { useEffect, useState, useRef } from "react";
+import Navbar from "../components/Navbar";
+import HeroSection from "../components/HeroSection";
+import TemplateCard from "../components/TemplateCard";
+import Footer from "../components/Footer";
+import API from "../userapi/userapi";
 import Loader from "../components/Loading";
 import SEO from "../components/SEO";
 import AOS from "aos";
@@ -47,7 +47,7 @@ const Home = () => {
         const response = await API.get('/templates/featured');
         setFeaturedTemplates(shuffleArray(response.data));
       } catch (error) {
-        console.error('Error fetching featured templates:', error);
+        console.error("Error fetching featured templates:", error);
       } finally {
         setLoading(false);
       }
