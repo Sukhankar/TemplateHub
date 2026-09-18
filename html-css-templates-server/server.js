@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 import connectDB from './config/db.js';
+import connectPostgres from './config/postgres.js';
 
 import adminAuthRoutes from './routes/AdminauthRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
@@ -61,11 +62,21 @@ app.use('/api/reviews', reviewRoutes);
 app.use(globalErrorHandler);
 
 
-// Connect to MongoDB and start server
+// Connect to Databases and start server
 const PORT = process.env.PORT || 5000;
-connectDB().then(() => {
-  console.log('✅ MongoDB connected');
+
+const startServer = async () => {
+  await connectPostgres();
+  try {
+    await connectDB();
+    console.log('✅ MongoDB connected');
+  } catch (err) {
+    console.warn('⚠️ MongoDB Connection warning:', err.message);
+  }
   app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-}).catch(err => console.error('❌ MongoDB connection error:', err));
+};
+
+startServer();
+
 
 
