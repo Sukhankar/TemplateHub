@@ -24,6 +24,9 @@ export const connectPostgres = async () => {
     const result = await client.query('SELECT NOW()');
     console.log('✅ Neon PostgreSQL Connected Successfully at:', result.rows[0].now);
     client.release();
+
+    const { initPostgresSchema } = await import('./initSchema.js');
+    await initPostgresSchema();
   } catch (err) {
     console.error('❌ PostgreSQL Connection Error:', err.message);
   }
